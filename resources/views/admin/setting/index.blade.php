@@ -1,6 +1,6 @@
 @extends('layout/master')
 @section('title')
-Safeer | General Setting
+Kwikcaart | General Setting
 @endsection
 @section('content')
 <style>

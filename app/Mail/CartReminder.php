@@ -31,7 +31,7 @@ class CartReminder extends Mailable
      */
     public function build()
     {
-        return $this->from('info@safeermarket.com', 'Safeer Market')
+        return $this->from('info@kwikcaart.com', 'Kwikcaart')
                     ->subject('Cart Reminder')
                     ->view('email.cart-reminder');
     }

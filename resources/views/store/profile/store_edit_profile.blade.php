@@ -1,6 +1,6 @@
 @extends('layout/master')
 @section('title')
-Safeer | Edit Profile
+Kwikcaart | Edit Profile
 @endsection
 @section('content')
 

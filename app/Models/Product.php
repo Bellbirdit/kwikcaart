@@ -4,6 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
+use App\Models\Deals;
+use App\Models\StorewiseDeal;
+use App\Models\DealProduct;
+use App\Models\StoredealProduct;
 
 class Product extends Model
 {
@@ -116,6 +121,65 @@ class Product extends Model
 
         return $this->belongsToMany(Order::class,'order_items','product_id','order_id');
 
+    }
+    
+    public function get_deal_price(){
+        $products = $this;
+        $today = Carbon::today();
+        $alldeals = Deals::where('end_date', '>=', $today)->where('status', 0)->get();
+        $storedeals = StorewiseDeal::where('end_date', '>=', $today)->where('status', 0)->get();
+        if(isset($alldeals) && sizeof($alldeals) > 0){
+            foreach($alldeals as $aldeal){
+                    $alldealpr = DealProduct::where('deal_id', $aldeal->id)->where('product_id', $products->id)->first();
+                    if($alldealpr) {
+                        $dealproducts = Product::where('stock', 'yes')->where('id', $alldealpr->product_id)->get();
+                    }
+                if($alldealpr){
+                    foreach($dealproducts as $dealproduct){
+                        if($dealproduct){
+                            $dprice = null; // initialize dprice variable
+                            if($alldealpr->discount_type == 'percentage') {
+                                $discounted = $dealproduct->price * $alldealpr->discount / 100;
+                                $dprice = $dealproduct->price - $discounted;
+                            } elseif($alldealpr->discount_type == 'flat') {
+                                $dprice = $dealproduct->price - $alldealpr->discount;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        $sdprice = null;
+
+        foreach($storedeals as $storedeal){
+                $storedealpr = StoredealProduct::where('storedeal_id', $storedeal->id)->where('product_id',$products->id)->first();
+                if ($storedealpr) {
+                    $stdealproduct = Product::where('stock', 'yes')->where('id', $storedealpr->product_id)->first();
+                    if($stdealproduct){
+                        if($storedealpr->discount_type == 'percentage'){
+                            $discounted = $stdealproduct->price * $storedealpr->discount / 100;
+                            $sdprice = $stdealproduct->price - $discounted;
+                            // dd($discounted, $stdealproduct, $sdprice);
+                        } else if($storedealpr->discount_type == 'flat'){
+                            $sdprice = $stdealproduct->price - $storedealpr->discount;
+                        }
+                        break;
+                    }
+                }
+        }
+        
+        if(isset($dealproduct)){
+            return ['price'=>round($dprice,2), 'old_price'=>$products->price, 'all_deal'];
+        }elseif(isset($stdealproduct)){
+            return ['price'=>round($sdprice,2), 'old_price'=>$products->price, 'store_deal'];
+        }elseif($products->price != $products->discounted_price){
+            return ['price'=>round($products->discounted_price,2), 'old_price'=>$products->price, 'discounted'];   
+        }else{
+            return ['price'=>round($products->discounted_price,2), 'normal'];
+        }
+        
     }
 
   

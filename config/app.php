@@ -18,6 +18,15 @@ return [
     'from_email' => env('APP_FROM_EMAIL', null),
     'noreply_email' => env('APP_FROM_NOREPLY_EMAIL', null),
     'admin_email' => env('APP_FROM_ADMIN_EMAIL', null),
+    'MERCHENT_ID' => env('MERCHENT_ID', null),
+    'MERCHENT_KEY_ID' => env('MERCHENT_KEY_ID', null),
+    'MERCHENT_SECRET_KEY' => env('MERCHENT_SECRET_KEY', null),
+    'MERCHENT_HOST' => env('MERCHENT_HOST', null),
+    'MERCHENT_RESOURCE' => env('MERCHENT_RESOURCE', null),
+    'MERCHENT_URL' => env('MERCHENT_URL', null),
+    'MERCHENT_PROFILE' => env('MERCHENT_PROFILE', null),
+    'MERCHENT_ACCESS_KEY' => env('MERCHENT_ACCESS_KEY', null),
+    
 
     /*
     |--------------------------------------------------------------------------

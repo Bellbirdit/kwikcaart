@@ -1,6 +1,6 @@
 @extends('frontend/layout/master')
 @section('title')
-Safeer | Forgot Password
+Kwikcaart | Forgot Password
 @endsection
 @section('frontend/content')
 
@@ -13,21 +13,21 @@ Safeer | Forgot Password
             </div>
         </div>
     </div>
-    <div class="page-content pt-150 pb-150">
+    <div class="page-content pt-50 pb-150">
         <div class="container">
             <div class="row">
-                <div class="col-xl-4 col-lg-6 col-md-12 m-auto">
+                <div class="col-xl-4 col-lg-6 col-md-12 m-auto" style="padding:30px; background:#fff; border:2px solid #ccc">
                     <div class="login_wrap widget-taber-content background-white">
                         <div class="padding_eight_all bg-white">
                             <div class="heading_s1">
                                 <img class="border-radius-15" src="assets/imgs/page/forgot_password.svg" alt="" />
-                                <h2 class="mb-15 mt-15">Forgot your password?</h2>
+                                <h2 class="mb-15" style="font-size:18px">Forgot your password?</h2>
                                 <p class="mb-30">Not to worry, we got you! Let’s get you a new password. Please enter
                                     your email address or your Username.</p>
                             </div>
                             <form action="" id="forget_password" name="forget_password">
                                 <h4>
-                                    <p id="emailLabel">Please Enter Your Email </p>
+                                    <p id="emailLabel" style="padding-bottom:15px">Please Enter Your Email </p>
                                 </h4>
 
                                 <div class="form-group">

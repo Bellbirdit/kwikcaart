@@ -1,7 +1,7 @@
 <div class="tab-pane fade" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
     <div class="card">
         <div class="card-header">
-            <h5>Account Details</h5>
+            <h1 class="mb-3">Account Details</h1>
         </div>
         <div class="card-body">
             <p>Already have an account? <a href="page-login.html">Log in instead!</a>

@@ -1,7 +1,7 @@
 @extends('layout/master')
 
 @section('title')
-Safeer | Order Feedback
+Kwikcaart | Order Feedback
 @endsection
 
 <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
@@ -26,6 +26,7 @@ Safeer | Order Feedback
                                 <th>Order Number</th>
                                 <th>Heading</th>
                                 <th>Description</th>
+                                <th>Date</th>
                             </tr>
                         </thead>
                         <tbody id="divData">
@@ -82,7 +83,11 @@ Safeer | Order Feedback
                         $("#divLoader").css('display', 'none')
                         $("#divData").css('display', 'contents')
                         $("#divData").append(response["rows"])
-                        $('#myTable').DataTable();
+                        var sort_col = $('#table').find("th:contains('Date')")[0].cellIndex;
+
+                        $('#myTable').DataTable({             
+                            order: [[ sort_col, 'desc' ]]                
+                          });
                     }
                 },
                 error: function (error) {

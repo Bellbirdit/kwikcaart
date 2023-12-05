@@ -1,6 +1,6 @@
 @extends('frontend/layout/master')
 @section('title')
-Safeer | Reset Password
+Kwikcaart | Reset Password
 @endsection
 @section('frontend/content')
 

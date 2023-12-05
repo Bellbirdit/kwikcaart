@@ -20,7 +20,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use Picqer\Barcode\BarcodeGeneratorPNG;
-
+use App\Helpers\Cybersource;
 
 
 class OrderController extends Controller
@@ -423,21 +423,22 @@ class OrderController extends Controller
 
         $orders = Order::where('id', $id)->first();
         $order = OrderItem::where('order_id', $orders->id)->get();
+        $store_product = [];
+        $storeproductsss = [];
+        // if (auth::user()->hasRole('Store')) {
+        //     $storeproductsss = StoreProducts::where('store_id', auth::user()->code)->where('stock', 'yes')->get();
+        //     foreach ($storeproductsss as $storpross) {
 
-        if (auth::user()->hasRole('Store')) {
-            $storeproductsss = StoreProducts::where('store_id', auth::user()->code)->where('stock', 'yes')->get();
-            foreach ($storeproductsss as $storpross) {
+        //         $store_product = Product::where('barcode', $storpross->barcode)->where('published', 1)->get();
 
-                $store_product = Product::where('barcode', $storpross->barcode)->where('published', 1)->get();
+        //     }
+        // } elseif (auth::user()->type == '2') {
+        //     $storeproductsss = StoreProducts::where('store_id', auth::user()->code)->where('stock', 'yes')->get();
+        //     // foreach($storeproductsss as $storpross){
+        //     //     $store_product = Product::where('id',$storpross->product_id)->where('published',0)->get();
 
-            }
-        } elseif (auth::user()->type == '2') {
-            $storeproductsss = StoreProducts::where('store_id', auth::user()->code)->where('stock', 'yes')->get();
-            // foreach($storeproductsss as $storpross){
-            //     $store_product = Product::where('id',$storpross->product_id)->where('published',0)->get();
-
-            // }
-        }
+        //     // }
+        // }
 
         if ($orders) {
             return view('admin.orders.store-order-detail', compact('orders', 'order', 'store_product', 'storeproductsss'));
@@ -579,53 +580,119 @@ class OrderController extends Controller
         }
 
         $or = Order::where('id', $request->order_id)->first();
+        // if ($request->status == 'accepted' and !empty($or->stripe_payment_id) and !empty($or->payment_token)) {
+        //     $amount = $or->coupon_payment-1;
+        //     $dx = $this->doPendingPayment($amount, $or->payment_token);
+        //     dd($dx);
+        // }
         // $or->order_status = $status;
         $or->changeStatus($status);
          $or->updated_by = Auth::user()->name;
         $or->save();
 
-        if ($or->order_status == 'deliverd') {
+        // if ($or->order_status == 'deliverd') {
             $fromEmail = config('app.from_email');
             $fromApp = config('app.name');
             Mail::send('email.order-delivered', ['order' => $or], function ($message) use ($or, $fromEmail, $fromApp) {
                 $message->to($or->email)
                     ->from($fromEmail, $fromApp)
-                    ->subject("Order Delivered");
+                    ->subject("Order ".$or->order_status);
             });
-        }
+        // }
         foreach ($orders as $order) {
 
             $orderitem = OrderItem::find($order->id);
             $orderitem->status = $status;
             $orderitem->save();
         }
+        
+        
+        
         return response()->json(['status' => 'success', 'msg' => "Order Status Changed Succesffully "]);
 
+    }
+    
+    public function doPendingPayment($amount, $token){
+        $body = '{
+          "clientReferenceInformation": {
+            "code": "TC50171_3"
+          },
+          "processingInformation": {
+            "capture": true
+          },
+          "paymentInformation": {
+            "legacyToken": {
+              "id": "'.$token.'"
+            }
+          },
+          "orderInformation": {
+            "amountDetails": {
+              "totalAmount": "'.$amount.'",
+              "currency": "AED"
+            },
+            "billTo": {
+              "firstName": "John",
+              "lastName": "Doe",
+              "address1": "1 Market St",
+              "locality": "san francisco",
+              "administrativeArea": "CA",
+              "buildingNumber": "11",
+              "postalCode": "94105",
+              "country": "US",
+              "email": "test@cybs.com",
+              "phoneNumber": "4158880000"
+            }
+          }
+        }';
+
+/*
+"billTo": {
+              "firstName": "John",
+              "lastName": "Doe",
+              "address1": "1 Market St",
+              "locality": "san francisco",
+              "administrativeArea": "CA",
+              "postalCode": "94105",
+              "country": "US",
+              "email": "test@cybs.com",
+              "phoneNumber": "4158880000"
+            }
+*/
+        $cyber = new Cybersource;
+        $resource = config('app.MERCHENT_RESOURCE');
+        $gmtDateTime = gmdate("D, d M Y H:i:s") . " GMT";
+        $digest = $cyber->GenerateDigest($body);
+        $signature = $cyber->GenerateSignature($digest, $gmtDateTime, "post", $resource);
+        $result = $cyber->CallCyberSourceAPI("POST", $body, $gmtDateTime, $digest, $signature);
+        list($headerString, $body) = explode("\r\n\r\n", $result, 2);
+        return $body;
     }
 
     public function cancelRequest(Request $request)
     {
-        $productprice = OrderItem::where('product_id',$request->product_id)->first();
-        $edit = new cancelRequest();
-        $edit->order_id = $request->order_id;
-        $edit->user_id = Auth::user()->id;
-        $edit->reason = $request->reason;
-        $edit->product_id = $request->product_id;
-        $edit->product_price = $productprice->products_quantityprice;
-        $edit->return_type = $request->return_type;
-        $edit->store_id = $request->store_id;
-        $edit->refund_status = "refund";
-        if ($edit->save()) {
-            $payment_gateway = OrderItem::where('order_id', $request->order_id)->first();
-            if ($payment_gateway->payment_getway == 'stripe') {
-                OrderItem::where('order_id', $edit->order_id)->where('product_id', $edit->product_id)->update(['refund_status' => '1' , 'status' => 'Return Pending']);
-                Order::where('id', $edit->order_id)->update(['order_status' => 'Return Pending']);
-            } else {
-                OrderItem::where('order_id', $edit->order_id)->update(['refund_status' => '1', 'status' => 'Return Pending']);
-                Order::where('id', $edit->order_id)->update(['order_status' => 'Return Pending']);
+        foreach($request->product_id as $product_id){
+            $productprice = OrderItem::where('product_id',$product_id)->first();
+            $edit = new cancelRequest();
+            $edit->order_id = $request->order_id;
+            $edit->user_id = Auth::user()->id;
+            $edit->reason = $request->reason;
+            $edit->product_id = $product_id;
+            $edit->product_price = $productprice->products_quantityprice;
+            $edit->return_type = $request->return_type;
+            $edit->store_id = $request->store_id;
+            $edit->refund_status = "refund";
+            if ($edit->save()) {
+                $payment_gateway = OrderItem::where('order_id', $request->order_id)->first();
+                if ($payment_gateway->payment_getway == 'stripe') {
+                    OrderItem::where('order_id', $edit->order_id)->where('product_id', $edit->product_id)->update(['refund_status' => '1' , 'status' => 'Return Pending']);
+                    Order::where('id', $edit->order_id)->update(['order_status' => 'Return Pending']);
+                } else {
+                    OrderItem::where('order_id', $edit->order_id)->where('product_id', $edit->product_id)->update(['refund_status' => '1', 'status' => 'Return Pending']);
+                    Order::where('id', $edit->order_id)->update(['order_status' => 'Return Pending']);
+                }
             }
         }
-        return response()->json(['status' => 'success', 'msg' => 'Cancel Rquest placed successfully']);
+        return response()->json(['status' => 'success', 'msg' => 'Cancel Request placed successfully']);
     }
 
     public function cancelRequestUpdate(Request $request)

@@ -292,7 +292,7 @@
     <div class="main">
         <div class="rozgar">
             <div class="title">
-                <h1>Safeer Market</h1>
+                <h1>Kwikcaart</h1>
             </div>
             <div class="img"><img src="{{ URL::asset('assets/logo/logo.png') }}" id="image" width="350px" alt=""></div>
             <div class="text">

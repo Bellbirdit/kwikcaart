@@ -1,6 +1,6 @@
 @extends('frontend/layout/master')
 @section('title')
-Safeer | Product Detail
+Kwikcaart | Product Detail
 @endsection
 @section('frontend/content')
 <style>
@@ -194,84 +194,35 @@ if ($count > 0) {
                                             </div>
                                         </div> 
                                         
-                                  @if(isset($alldeals) && sizeof($alldeals) > 0)
-                                            @foreach($alldeals as $aldeal)
-                                                @php
-                                                    $alldealpr = App\Models\DealProduct::where('deal_id', $aldeal->id)->where('product_id', $products->id)->first();
-                                                    if($alldealpr) {
-                                                        $dealproducts = App\Models\Product::where('stock', 'yes')->where('id', $alldealpr->product_id)->get();
-                                                    }
-                                                @endphp
-                                                @if($alldealpr)
-                                                @foreach($dealproducts as $dealproduct)
-                                                    @if($dealproduct)
-                                                        @php
-                                                            $dprice = null; // initialize dprice variable
-                                                            if($alldealpr->discount_type == 'percentage') {
-                                                                $discounted = $dealproduct->price * $alldealpr->discount / 100;
-                                                                $dprice = $dealproduct->price - $discounted;
-                                                            } elseif($alldealpr->discount_type == 'flat') {
-                                                                $dprice = $dealproduct->price - $alldealpr->discount;
-                                                            }
-                                                        @endphp
-                                                    @endif
-                                                @endforeach
-                                                @endif
-                                            @endforeach
-                                        @endif
-
-
-                                        @php
-                                            $sdprice = null;
-                                        @endphp
-
-                                        @foreach($storedeals as $storedeal)
-                                            @php
-                                                $storedealpr = App\Models\StoredealProduct::where('storedeal_id', $storedeal->id)->where('product_id',$products->id)->first();
-                                                if ($storedealpr) {
-                                                    $stdealproducts = App\Models\Product::where('stock', 'yes')->where('id', $storedealpr->product_id)->get();
-                                                    foreach ($stdealproducts as $stdealproduct) {
-                                                        if($storedealpr->discount_type == 'percentage'){
-                                                            $discounted = $stdealproduct->price * $storedealpr->discount / 100;
-                                                            $sdprice = $stdealproduct->price - $discounted;
-                                                        } else if($storedealpr->discount_type == 'flat'){
-                                                            $sdprice = $stdealproduct->price - $storedealpr->discount;
-                                                        }
-                                                    }
-                                                }
-                                            @endphp
-                                        @endforeach
 
                                 <div class="clearfix product-price-cover">
                                     <div class="product-price primary-color float-left">
-                                        @if(isset($dealproduct))
-                                            <span class="current-price text-brand">AED {{round($dprice,2)}}</span>
-                                            <span class="old-price font-md ml-15">{{$products->discounted_price}}</span>
-                                        @elseif(isset($stdealproduct))
-                                            <span class="current-price text-brand">AED {{round($sdprice,2)}}</span>
-                                            <span class="old-price font-md ml-15">{{round($products->discounted_price,2)}}</span>
-                                        @elseif($products->price != $products->discounted_price)
-                                            <span class="current-price text-brand">AED {{$products->discounted_price}}</span>
-                                            <span class="old-price font-md ml-15">{{round($products->price,2)}}</span>
-                                        @else
-                                            <span class="current-price text-brand">AED {{round($products->discounted_price,2)}}</span>
+                                        @php
+                                        $priceArray = $products->get_deal_price();
+                                        $price = $priceArray['price'];
+                                        @endphp
+                                        @if(isset($products))
+                                            <span class="current-price text-brand">AED {{round($price,2)}}</span>
+                                            @if(isset($priceArray['old_price']))
+                                            <span class="old-price font-md ml-15">{{$priceArray['old_price']}}</span>
+                                            @endif
                                         @endif
                                     </div>
                                 </div>
 
                                         <div class="row">
                                             <ul class="col-md-12">
-                                                <li class="mb-5">Barcode: <a href="#">{{$products->barcode}}</a></li>
-                                                <li class="mb-5">Brand: <span class="text-brand">{{App\Models\Brand::where('id',$products->brand_id)->pluck('name')->first()}}</span></li>
-                                                <li class="mb-5">Category:<span class="text-brand"> {{App\Models\Category::where('id',$products->category_id)->pluck('name')->first()}}</span>
+                                                <li class="mb-0">Barcode: <a href="#">{{$products->barcode}}</a></li>
+                                                <li class="mb-0">Brand: <span class="text-brand">{{App\Models\Brand::where('id',$products->brand_id)->pluck('name')->first()}}</span></li>
+                                                <li class="mb-0">Category:<span class="text-brand"> {{App\Models\Category::where('id',$products->category_id)->pluck('name')->first()}}</span>
                                                 </li>
                                                 
                                             </ul>
                                         </div>
                                        
                                         <div class="short-desc mb-30">
-                                            <h6 class="py-2 text-grey">About this item</h6>
-                                            <p class="">{!! nl2br($products->short_description) !!}</p>
+                                            <h6 class="py-1 text-grey">About this item</h6>
+                                            <p style="text-align:justify">{!! nl2br($products->short_description) !!}</p>
                                         </div>
                                         
                                     </div>
@@ -313,8 +264,11 @@ if ($count > 0) {
                                                     <div class="product-price">
                                                         <!--<span>AED {{$pro->discount_price($pro)}} </span>-->
                                                         <!--<span class="old-price">AED {{$pro->price}}</span>-->
-                                        
-                                                    <span class="current-price text-brand">AED {{ $pro->discounted_price }}</span>
+                                                     @php
+                                        $priceArray = $pro->get_deal_price();
+                                        $price = $priceArray['price'];
+                                        @endphp
+                                                    <span class="current-price text-brand">AED {{ $price }}</span>
                                                
                                                         <input type="checkbox" name="checkbox[]" class="checkbox"  id="checkbox{{$pro->id}}" value="{{$pro->id}}" style="width: 20px;height: 20px;">
                                                     </div>
@@ -542,9 +496,12 @@ if ($count > 0) {
                                                     <!--</div>-->
                                                     <div class="product-price">
                                                 @if(isset($related))
-
+                                                     @php
+                                        $priceArray = $related->get_deal_price();
+                                        $price = $priceArray['price'];
+                                        @endphp
                                                    
-                                                    <span class="current-price text-brand">AED {{ $related->discounted_price }}</span>
+                                                    <span class="current-price text-brand">AED {{ $price }}</span>
                                                 @endif
                                                     </div>
                                                 </div>
@@ -561,18 +518,11 @@ if ($count > 0) {
                             <div class="detail-extralink " style="text-align:center">
                                 <h4 class="text-center">
                                     <div class="product-price primary-color float-left" style="font-size: 20px;font-weight: 600;">
-                                        @if(isset($dealproduct))
-                                            <span class="current-price text-brand ">AED {{round($dprice,2)}}</span>
-                                          
-                                        @elseif(isset($stdealproduct))
-                                            <span class="current-price text-brand">AED {{round($sdprice,2)}}</span>
-                                           
-                                        @elseif($products->price != $products->discounted_price)
-                                            <span class="current-price text-brand">AED {{round($products->discounted_price,2)}}</span>
-                                            
-                                        @else
-                                            <span class="current-price text-brand">AED {{round($products->discounted_price,2)}}</span>
-                                        @endif
+                                        @php
+                                        $priceArray = $products->get_deal_price();
+                                        $price = $priceArray['price'];
+                                        @endphp
+                                        <span class="current-price text-brand ">AED {{round($price,2)}}</span>
                                 </div>
                                 </h4>
                             
@@ -582,9 +532,16 @@ if ($count > 0) {
                                     <a href="#" class="qty-up"><i class="fi-rs-plus"></i></a>
                                 </div>
                                 <div class="product-extra-link2">
-                                    <a  aria-label="Add To Cart" class="action-btn hover-up add_cart" href="javascript:;"  id="{{ $products->id }}"> <img id="{{ $products->id }}" src="{{ asset('frontend/assets/imgs/theme/icons/dn-cart.png') }}"alt="" style=" width: 25px;" /></a>
-                                    <a aria-label="Add To" class="action-btn hover-up   add-wishlist" href="javascript:;"  id="{{ $products->id }}"><img  src="{{ asset('frontend/assets/imgs/theme/icons/dn-heart.png') }}"alt="" style=" width: 25px;" /></a>
-                                    <a aria-label="Buy Now" class="action-btn hover-up btnBuyNowbtn" href="javascript:;"  id="{{ $products->id }}"><img  src="{{ asset('frontend/assets/imgs/theme/icons/dn-buy.png') }}"alt="" style=" width: 25px;" /></a>
+                                    <!--<a  aria-label="Add To Cart" class="action-btn hover-up add_cart" href="javascript:;"  id="{{ $products->id }}"> <img id="{{ $products->id }}" src="{{ asset('frontend/assets/imgs/theme/icons/dn-cart.png') }}"alt="" style=" width: 25px;" /></a>-->
+                                    <!--<a aria-label="Add To" class="action-btn hover-up   add-wishlist" href="javascript:;"  id="{{ $products->id }}"><img  src="{{ asset('frontend/assets/imgs/theme/icons/dn-heart.png') }}"alt="" style=" width: 25px;" /></a>-->
+                                    <!--<a aria-label="Buy Now" class="action-btn hover-up btnBuyNowbtn" href="javascript:;"  id="{{ $products->id }}"><img  src="{{ asset('frontend/assets/imgs/theme/icons/dn-buy.png') }}"alt="" style=" width: 25px;" /></a>-->
+                                    <div class="a_cart" style="width:140px;">
+                                    <a  aria-label="Add To Cart" class="action-btn hover-up add_cart" href="javascript:;"  id="{{ $products->id }}"> Add To Cart</a>
+                                     <!--<a aria-label="Buy Now" class="action-btn hover-up btnBuyNowbtn" style="display:none;" href="javascript:;"  id="{{ $products->id }}">Buy Now</a>-->
+                                   
+                                   </div>
+                                   
+                                     <a aria-label="Add To" class="action-btn hover-up   add-wishlist" href="javascript:;"  id="{{ $products->id }}"><img  src="{{ asset('frontend/assets/imgs/theme/icons/dn-heart.png') }}"alt="" style=" width: 25px;" /></a>
                                     
                                    </div>
                                 
@@ -631,21 +588,21 @@ if ($count > 0) {
                            
                           @elseif($products->express_delivery == 'no')
                                 <div class="vendor-logo d-flex mb-30">
-                                    <div class="vendor-name ml-15">
+                                    <div class="vendor-name">
                                         <h6>
-                                            <a href="javascript:;">Standard Delivery</a>
+                                            <b style="color: red;" href="javascript:;">Home Delivery</b>
                                         </h6>
                                         
                                         @if(isset($standarddate->date) )
-                                            <div class="product-rate-cover">
-                                                <span class="font-small ml-5 text-muted">As per selected slot</span><br>
+                                            <div class="product-rate-cover" style="font-size: 12px;">
+                                                
                                                 
                                                 @if(isset($standarddate->date))
-                                                    <span class="font-small ml-5 text-muted">Date: {{ \Carbon\Carbon::parse($standarddate->date)->isoFormat('MMM Do YYYY')}}</span><br>
+                                                    <span class="font-small text-muted">Date: {{ \Carbon\Carbon::parse($standarddate->date)->isoFormat('MMM Do YYYY')}}</span><br>
                                                 @endif
                                                 
                                                 @if(isset($standardtime->start_time))
-                                                    <span class="font-small ml-5 text-muted">Next Slot: {{$standardtime->start_time}} To {{$standardtime->end_time}}</span>
+                                                    <span class="font-small text-muted">Next Slot: {{$standardtime->start_time}} To {{$standardtime->end_time}}</span>
                                                 @endif
                                             </div>
                                         @endif
@@ -655,19 +612,19 @@ if ($count > 0) {
 
                             
                             <div class="vendor-logo d-flex mb-30">
-                                <div class="vendor-name ml-15">
+                                <div class="vendor-name">
                                     <h6>
-                                        <a href="javascript:;">Self Pickup</a>
+                                        <b style="color: red;" href="javascript:;">Collect From Store</b>
                                     </h6>
                                     
-                                    <div class="product-rate-cover">
+                                    <div class="product-rate-cover" style="font-size: 12px;">
 
-                                        <span class="font-small ml-5 text-muted">Collect from store</span><br>
+                                        
                                         @if(isset($pickuptimes->date))
-                                        <span class="font-small ml-5 text-muted">Date: {{ \Carbon\Carbon::parse($pickuptimes->date)->isoFormat('MMM Do YYYY')}}</span><br>
+                                        <span class="font-small text-muted">Date: {{ \Carbon\Carbon::parse($pickuptimes->date)->isoFormat('MMM Do YYYY')}}</span><br>
                                         @endif
                                         @if(isset($pickuptime->start_time))
-                                        <span class="font-small ml-5 text-muted">Next Slot: {{$pickuptime->start_time}} To {{$pickuptime->end_time}}</span>
+                                        <span class="font-small text-muted">Next Slot: {{$pickuptime->start_time}} To {{$pickuptime->end_time}}</span>
                                         @endif
                                     </div>
                                    

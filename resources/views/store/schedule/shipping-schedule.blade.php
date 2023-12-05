@@ -1,6 +1,6 @@
 @extends('layout/master')
 @section('title')
-Safeer | Shipping Schedule
+Kwikcaart | Shipping Schedule
 @endsection
 @section('content')
 
@@ -56,7 +56,7 @@ Safeer | Shipping Schedule
                         <div class="row d-flex">
                             @foreach($shippingschedule as $scheduale)
                            
-                                <h5 class="py-2">Slot Date : {{ $scheduale->date }} 
+                                <h5 class="py-2">Slot Date : {{ date("d F, Y", strtotime($scheduale->date)) }} 
                                      <a id="{{$scheduale->id}}" href="javascript:void(0)" class="px-1 btnDelete"><i class="material-icons md-delete_forever text-danger "></i></a> </h5>
 
                                 <?php $shippings = App\Models\ShippingTime::where('date_id',$scheduale->id)->get(); ?>
@@ -105,7 +105,7 @@ Safeer | Shipping Schedule
             <div class="modal-body">
                 <form class="form-horizontal" id="shippingdate_form">
                     <div class="form-group">
-                        <input type="date" class="form-control" required id="" placeholder="Enter date" name="date">
+                        <input type="date" class="form-control" required id="" placeholder="dd-mm-yyyy" name="date">
                     </div>
                     <div class="text-end">
                     <button class="btn ripple btn-primary" id="btnSubmit" type="submit">
@@ -136,7 +136,7 @@ Safeer | Shipping Schedule
                         <select name="date_id" class="form-control" required>
                             <option value="" selected> Select Date</option>
                             @foreach($dates as $date)
-                                <option value="{{$date->id}}">{{$date->date}}</option>
+                                <option value="{{$date->id}}">{{ date("d F, Y", strtotime($date->date)) }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -165,7 +165,47 @@ Safeer | Shipping Schedule
 @endsection
 @section('scripts')
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
+<style>
+    input[type="date"]::-webkit-datetime-edit, input[type="date"]::-webkit-inner-spin-button, input[type="date"]::-webkit-clear-button {
+  color: #fff;
+  position: relative;
+}
+
+input[type="date"]::-webkit-datetime-edit-year-field{
+  position: absolute !important;
+  border-left:1px solid #8c8c8c;
+  padding: 2px;
+  color:#000;
+  left: 56px;
+}
+
+input[type="date"]::-webkit-datetime-edit-month-field{
+  position: absolute !important;
+  border-left:1px solid #8c8c8c;
+  padding: 2px;
+  color:#000;
+  left: 26px;
+}
+
+
+input[type="date"]::-webkit-datetime-edit-day-field{
+  position: absolute !important;
+  color:#000;
+  padding: 2px;
+  left: 4px;
+  
+}
+</style>
 <script>
+
+$("input[type=date]").on("change", function() {
+    this.setAttribute(
+        "data-date",
+        moment(this.value, "YYYY-MM-DD")
+        .format( this.getAttribute("data-date-format") )
+    )
+}).trigger("change");
           $("#shippingdate_form").on('submit', (function(e) {
             e.preventDefault();
             $.ajax({

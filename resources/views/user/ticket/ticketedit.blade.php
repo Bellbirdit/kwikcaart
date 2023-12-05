@@ -1,6 +1,6 @@
 @extends('frontend/layout/master')
 @section('title')
-Safeer | Shop
+Kwikcaart | Shop
 @endsection
 @section('frontend/content')
 <link href="{{ asset('assets/css/main.css?v=1.1') }}" rel="stylesheet" type="text/css" />

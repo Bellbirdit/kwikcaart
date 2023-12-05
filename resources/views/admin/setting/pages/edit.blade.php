@@ -1,6 +1,6 @@
 @extends('layout/master')
 @section('title')
-Safeer | Edit Page
+Kwikcaart | Edit Page
 @endsection
 @section('content')
 

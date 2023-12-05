@@ -28,6 +28,47 @@
                     <div class="card-body border">
                         <!-- row // -->
                         <div class="row">
+                            <div class="col-lg-12">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <td>
+                                                    Created <br>
+                                                    <small>{{date("d F,Y h:i A", strtotime($order->created_at))}}</small>
+                                                </td>
+                                                @php
+                                                $statusOrder = [];
+                                                @endphp
+                                                
+                                                @if(!$order->orderActivity->isEmpty())
+                                                    @foreach($order->orderActivity as $activity)
+                                                    @php
+                                                        if(!in_array($activity->status, $statusOrder)){
+                                                            $statusOrder[] = $activity->status;
+                                                        }else{
+                                                            continue;
+                                                        }
+                                                    @endphp
+                                                    <td>
+                                                        {{ucfirst($activity->status)}} <br>
+                                                        <small>{{date("d F,Y h:i A", strtotime($activity->created_at))}}</small>
+                                                    </td>
+                                                    @endforeach
+                                                @else
+                                                    <td>
+                                                        {{ucfirst($order->order_status)}} <br>
+                                                        <small>{{date("d F,Y h:i A", strtotime($order->updated_at))}}</small>
+                                                    </td>
+                                                @endif
+                                                
+                                                
+                                            </tr>
+                                        </thead>
+                                        
+                                    </table>
+                                </div>
+                            </div>
                             <div class="col-lg-9">
                                 <div class="table-responsive">
                                     <table class="table">
@@ -48,6 +89,7 @@
                                         @foreach($orderdetails as $detail)
                                         @php
                                             $pro = App\Models\Product::where('id',$detail->product_id)->first();
+                                            if(!$pro) continue;
                                             $img = $pro->getImage($pro->thumbnail);
                                         @endphp
                                             <tr>
@@ -57,7 +99,11 @@
                                                             <img src="{{ asset('uploads/files/'.$img) }}" width="40"
                                                                 height="40" class="img-xs" alt="Item" />
                                                         </div>
-                                                        <div class="info">{{$pro->name}}</div>
+                                                        <div class="info">{{$pro->name}} <br> 
+                                                        @if($detail->quantity == 0)
+                                                        <small style="color:red;">Item Not Available</small>
+                                                        @endif
+                                                        </div>
                                                     </a>
                                                 </td>
                                                 <td>{{$detail->product_price}}</td>
@@ -215,7 +261,7 @@
 
 
                                                 @elseif($status != 'cancelled')
-                                                <p class="text-danger">Generate ticket to cancel order</p>
+                                                <a href="/user/dashboard?tab=support_ticket" class="text-danger">Generate ticket to cancel order</a>
 
                                                 @endif
 
@@ -253,8 +299,8 @@
                     <div class="mb-3 " id="append_option">
                         <label for="" class="form-label">Select product</label>
 
-                        <select class="form-select append_option" aria-label="Default select example "
-                            name="product_id">
+                        <select class="form-select append_option" multiple aria-label="Default select example "
+                            name="product_id[]">
 
                         </select>
                     </div>

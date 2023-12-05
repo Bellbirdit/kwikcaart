@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-xl-12 col-lg-12 m-auto">
                     <div class="mb-50">
-                       
+                       <h1 class="mb-3">Wishlist</h1>
                         <h6 class="text-body">There are <span
                                 class="text-brand wishlist_count">{{ $wishlist_count }}</span>
                             products in this list</h6>

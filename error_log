@@ -36,3 +36,5 @@
 [05-Jul-2023 07:26:38 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 7.4.0". You are running 7.3.33. in /home/kwikcaart/public_html/vendor/composer/platform_check.php on line 24
 [05-Jul-2023 07:51:17 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 7.4.0". You are running 7.3.33. in /home/kwikcaart/public_html/vendor/composer/platform_check.php on line 24
 [02-Aug-2023 17:42:10 Asia/Dubai] PHP Fatal error:  Cannot use empty array elements in arrays in /home/kwikcaart/public_html/app/Http/Controllers/HomeController.php on line 84
+[08-Aug-2023 11:23:31 UTC] PHP Notice:  Undefined index: STATUS_CODE in /home/kwikcaart/public_html/kwikcaart_pay.php on line 564
+[04-Sep-2023 16:52:35 Asia/Dubai] PHP Fatal error:  Cannot use isset() on the result of an expression (you can use "null !== expression" instead) in /home/kwikcaart/public_html/app/Imports/ProductImport.php on line 31

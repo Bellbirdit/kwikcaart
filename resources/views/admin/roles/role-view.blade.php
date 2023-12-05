@@ -1,6 +1,6 @@
 @extends('layout/master')
 @section('title')
-Safeer | Roles
+Kwikcaart | Roles
 @endsection
 @section('content')
 <!-- breadcrumb -->

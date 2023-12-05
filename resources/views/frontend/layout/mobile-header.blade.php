@@ -25,26 +25,39 @@
                         <li class="">
                             <a href="{{url('/')}}">Home</a>
                         </li>
-                        <!--<li class="menu-item-has-children">-->
-                        <!--    <a href="shop-grid-right.html">shop</a>-->
-                        <!--    <ul class="dropdown">-->
-                        <!--        <li class="menu-item-has-children">-->
-                        <!--            <a href="#">Category One</a>-->
-                        <!--            <ul class="dropdown">-->
-                        <!--                <li><a href="#">Sub One</a></li>-->
-                        <!--                <li><a href="#">Sub Two</a></li>-->
-                        <!--            </ul>-->
-                        <!--        </li>-->
-                        <!--        <li class="menu-item-has-children">-->
-                        <!--            <a href="#">Category One</a>-->
-                        <!--            <ul class="dropdown">-->
-                        <!--                <li><a href="#">Sub One</a></li>-->
-                        <!--                <li><a href="#">Sub Two</a></li>-->
-                        <!--            </ul>-->
-                        <!--        </li>-->
-                                
-                        <!--    </ul>-->
-                        <!--</li>-->
+                        @php
+                            $cats= App\Models\Category::with('cbannercat')->where('order_level','!=','0')->orderBy('order_level','ASC')->get();
+                        @endphp
+                        @if(isset($cats) && sizeof($cats)>0)
+                            @foreach($cats as $cat)
+                                @php
+                                    $subcats = $cat->cbannercat; 
+                                @endphp
+                                <li class="@if(!empty($subcats)) menu-item-has-children @endif">
+                                    <a href="javascript:;" id="{{ $cat->id }}">{{ $cat->name }}</a>
+                                    @foreach($subcats as $subca)
+                                        <ul class="dropdown">
+                                            @php
+                                                $subsubb = $subca->cbannercat;
+                                                $subsub = $subsubb->unique('name');
+                                            @endphp
+                                            <li class="@if(!empty($subsubb) && count($subsubb) > 1) menu-item-has-children @endif">
+                                                <a href="{{ route('cat-products',$subca->id) }}">{{ $subca->name }}</a>
+                                                @if(!empty($subsubb) && count($subsubb) > 1)
+                                                    <ul class="dropdown">
+                                                        @foreach($subsub as $subsu)
+                                                            <li><a href="{{ route('cat-products',$subsu->id) }}">{{ $subsu->name }}</a></li>
+                                                        @endforeach
+                                                    </ul>
+                                                @endif
+                                            </li>
+                                            
+                                        </ul>
+                                    @endforeach
+                                </li>        
+                            @endforeach
+                        @endif
+                        
                         <!--<li><a href="{{url('track-order')}}">Order Tracking</a></li>-->
                         @if(!Auth::check())
                             <li><a href="{{ url('/login') }}">Login</a></li>
@@ -88,7 +101,7 @@
             <!--    <a href="#"><img src="{{asset('frontend/assets/imgs/theme/icons/icon-youtube-white.svg')}}"-->
             <!--            alt="" /></a>-->
             <!--</div>-->
-            <div class="site-copyright">Copyright 2023 © Safeer Market. All rights reserved.</div>
+            <div class="site-copyright">Copyright 2023 © Kwikcaart. All rights reserved.</div>
         </div>
     </div>
 </div>

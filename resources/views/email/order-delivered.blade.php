@@ -303,15 +303,15 @@
             <div class="text">
                 <h1 >hi {{$order->first_name}}</h1>
                 
-                <p>Your order {{$order->order_number}} is delivered</p>
-                <p class="p2">If you have any question, please contact us via <a href="#">info@safeermarket.com</a></p>
+                <p>Your order {{$order->order_number}} is {{$order->order_status}}</p>
+                <p class="p2">If you have any question, please contact us via <a href="#">info@kwikcaart.com</a></p>
                     
             </div>
 
         </div>
 
         <div class="p3">
-            <p>This email was sent by a company owned by Safeer Group, registered office at  Industrial Area 1, Near Sharjah City Center - Sharjah, UAE</p>
+            <p>This email was sent by a company owned by Kwikcaart Group, registered office at  Industrial Area 1, Near Sharjah City Center - Sharjah, UAE</p>
         </div>
     </div>
 </body>

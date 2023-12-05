@@ -1,6 +1,6 @@
 @extends('layout/master')
 @section('title')
-Safeer | Create Page
+Kwikcaart | Create Page
 @endsection
 @section('content')
 

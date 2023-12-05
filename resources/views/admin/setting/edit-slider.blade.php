@@ -1,6 +1,6 @@
 @extends('layout/master')
 @section('title')
-Safeer | Home Page Setting
+Kwikcaart | Home Page Setting
 @endsection
 @section('content')
 

@@ -1,7 +1,7 @@
 @extends('layout/master')
 
 @section('title')
-Safeer | Customers
+Kwikcaart | Customers
 @endsection
 
 @section('content')

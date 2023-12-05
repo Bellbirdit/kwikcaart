@@ -1,7 +1,7 @@
 <div class="tab-pane fade" id="feedback" role="tabpanel" aria-labelledby="feedback-tab">
     <div class="card">
         <div class="card-header">
-            <h3 class="mb-0">Order Feedback</h3>
+            <h1 class="mb-3">Order Feedback</h1>
         </div>
         <div class="card-body">
         <form id="brand_form">

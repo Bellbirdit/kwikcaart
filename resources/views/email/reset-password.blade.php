@@ -299,7 +299,7 @@
                 <h1 id="text">Hi, </h1>
                 <span id="code">CONGRATULATION</span>
                 <p class="p">To recover your password please click the button below</p>
-                <p class="p">Thank you for your interest in Safeer Market. </p>
+                <p class="p">Thank you for your interest in Kwikcaart. </p>
             </div>
         </div>
 
@@ -318,7 +318,7 @@
             
         </div> 
         <div class="p3">
-            <a href="https://safeermarket.com/">safeermarket.com</a>
+            <a href="https://kwikcaart.com/">kwikcaart.com</a>
         </div>
     </div>
 </body>

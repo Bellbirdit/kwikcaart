@@ -1,6 +1,6 @@
 @extends('user/layout/master')
 @section('title')
-Safeer | Order Tracking
+Kwikcaart | Order Tracking
 @endsection
 @section('content')
 

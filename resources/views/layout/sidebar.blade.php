@@ -84,11 +84,11 @@
                             <span class="text">Coupons</span>
                         </a>
                     </li>
-                    <li class="menu-item">
-                        <a class="menu-link" href="#">
-                            <span class="text">Newsletters</span>
-                        </a>
-                    </li>
+                    <!--<li class="menu-item">-->
+                    <!--    <a class="menu-link" href="#">-->
+                    <!--        <span class="text">Newsletters</span>-->
+                    <!--    </a>-->
+                    <!--</li>-->
                     <li class="menu-item">
                         <a class="menu-link" href="{{ url('upload/list') }}">
                             <span class="text">Media file</span>
@@ -105,11 +105,11 @@
                         </a>
                     </li>
                  
-                    <li class="menu-item">
-                        <a class="menu-link" href="#">
-                            <span class="text">Support</span>
-                        </a>
-                    </li>
+                    <!--<li class="menu-item">-->
+                    <!--    <a class="menu-link" href="#">-->
+                    <!--        <span class="text">Support</span>-->
+                    <!--    </a>-->
+                    <!--</li>-->
                     <li class="menu-item">
                         <a class="menu-link" href="{{ url('all/deals') }}">
                             <span class="text">All Store Deals</span>

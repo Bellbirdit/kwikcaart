@@ -1,6 +1,6 @@
 @extends('frontend/layout/master')
 @section('title')
-Safeer | {{ $page->title}}
+Kwikcaart | {{ $page->title}}
 @endsection
 @section('frontend/content')
 <section class="pt-4 mb-4">

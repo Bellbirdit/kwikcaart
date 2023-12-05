@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Session;
+use App\Models\StoreProducts;
 
 class Category extends Model
 {
@@ -37,8 +39,19 @@ class Category extends Model
     }
 
     public function products(){
-
-        return $this->hasMany(Product::class)->where('stock', 'yes')->where('published',1);
+        $store_id = "";
+        if (session::get('store_id')) {
+            $store_id = session::get('store_id');
+        }
+        $storeproducts = StoreProducts::where('store_id', $store_id)
+            ->where('stock', 'yes')
+            ->pluck('product_id');
+            // dd($storeproducts);
+        return $this->hasMany(Product::class)
+        // ->select('products.*')->join('store_products', 'products.barcode', '=', 'store_products.barcode')->where('store_products.stock', 'yes')
+        ->where('stock', 'yes')
+        ->whereIn('id', $storeproducts)
+        ->where('published',1);
     }
          public function subcategories()
      {

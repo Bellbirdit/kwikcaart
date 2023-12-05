@@ -1,6 +1,6 @@
 @extends('layout/master')
 @section('title')
-Safeer | BulkUpload
+Kwikcaart | BulkUpload
 @endsection
 @section('content')
 
@@ -172,28 +172,28 @@ Safeer | BulkUpload
         </div>
 
 
-        <div class="col-md-4 p-3">
-            <div class="card">
-                <header class="card-header">
-                    <h5>Product Bulk Delete</h5>
-                </header>
-                <div class="card-body">
-                    <form action="">
-                        <div class="mb-2">
-                            <label for="product_name" class="form-label">CSV</label>
-                            <input type="file" class="form-control" name="product_excel" id="importFiledel"
-                                accept=".xls, .xlsx, .csv" />
+        <!--<div class="col-md-4 p-3">-->
+        <!--    <div class="card">-->
+        <!--        <header class="card-header">-->
+        <!--            <h5>Product Bulk Delete</h5>-->
+        <!--        </header>-->
+        <!--        <div class="card-body">-->
+        <!--            <form action="">-->
+        <!--                <div class="mb-2">-->
+        <!--                    <label for="product_name" class="form-label">CSV</label>-->
+        <!--                    <input type="file" class="form-control" name="product_excel" id="importFiledel"-->
+        <!--                        accept=".xls, .xlsx, .csv" />-->
 
-                        </div>
-                        <div class="mb-2">
-                            <a class="btn btn-success text-white btnImportdel"> <i class="fas fa-spinner fa-spin fa-import"
-                                    style="display:none;"></i> Upload & Save</a>
+        <!--                </div>-->
+        <!--                <div class="mb-2">-->
+        <!--                    <a class="btn btn-success text-white btnImportdel"> <i class="fas fa-spinner fa-spin fa-import"-->
+        <!--                            style="display:none;"></i> Upload & Save</a>-->
 
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        <!--                </div>-->
+        <!--            </form>-->
+        <!--        </div>-->
+        <!--    </div>-->
+        <!--</div>-->
 
     </div>
 </section>

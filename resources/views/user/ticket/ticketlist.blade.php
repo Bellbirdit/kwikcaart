@@ -1,6 +1,6 @@
 @extends('frontend/layout/master')
 @section('title')
-Safeer | Shop
+Kwikcaart | Shop
 @endsection
 @section('frontend/content')
 <link href="{{ asset('assets/css/main.css?v=1.1') }}" rel="stylesheet" type="text/css" />
@@ -30,13 +30,13 @@ Safeer | Shop
                     <div id="divData" style="display:none">
                         <div class="">
 
-                            <table class="table table-sm table-bordered" id="" cellspacing="0">
+                            <table class="table table-sm table-bordered" id="" cellspacing="0" align="center" style="width:60%; margin:auto">
                                 <thead>
                                     <tr>
-                                        <th>Ticket ID</th>
-                                        <th>User</th>
-                                        <th>Subject</th>
-                                        <th>Status</th>
+                                        <th width="12%">Ticket ID</th>
+                                        <th width="25%">User</th>
+                                        <th width="15%">Subject</th>
+                                        <th width="15%">Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>

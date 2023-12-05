@@ -7,7 +7,7 @@ body, html {
 }
 
 .bgimg {
-  /*background-image: url('https://safeermarket.com/public/uploads/all/zlHrHizMMPdfaSRqphHZi9xSg71fUHUsD1HhY1K6.jpg');*/
+  /*background-image: url('https://kwikcaart.com/public/uploads/all/zlHrHizMMPdfaSRqphHZi9xSg71fUHUsD1HhY1K6.jpg');*/
   height: 100%;
   background-position: center;
   background-size: cover;
@@ -51,7 +51,7 @@ hr {
   <div class="middle">
     <h1>COMING SOON</h1>
     <hr>
-    <img src="https://safeermarket.com/assets/imgs/theme/logo.png"style="max-width:500px">
+    <img src="https://kwikcaart.com/assets/imgs/theme/logo.png"style="max-width:500px">
   </div>
   <div class="bottomleft">
     <!--<p>Some text</p>-->

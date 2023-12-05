@@ -1,6 +1,6 @@
 @extends('frontend/layout/master')
 @section('title')
-Safeer | User Dashboard
+Kwikcaart | User Dashboard
 @endsection
 @section('frontend/content')
 
@@ -18,7 +18,7 @@ Safeer | User Dashboard
             </div>
         </div>
     </div> -->
-    <div class="page-content pt-30 pb-30">
+    <div class="page-content pt-30 pb-30 mt-3>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-10 m-auto">
@@ -45,15 +45,15 @@ Safeer | User Dashboard
                                         <a class="nav-link" id="wishlist-tab" data-bs-toggle="tab" href="#wishlist"
                                             role="tab" aria-controls="wishlist" aria-selected="false">Wishlist</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="wallet-tab" data-bs-toggle="tab" href="#wallet"
-                                            role="tab" aria-controls="wallet" aria-selected="false"> Wallet</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="safeer-plus-point-tab" data-bs-toggle="tab"
-                                            href="#safeer-plus-point" role="tab" aria-controls="safeer-plus-point"
-                                            aria-selected="false">Safeer Plus Point</a>
-                                    </li>
+                                    <!--<li class="nav-item">-->
+                                    <!--    <a class="nav-link" id="wallet-tab" data-bs-toggle="tab" href="#wallet"-->
+                                    <!--        role="tab" aria-controls="wallet" aria-selected="false"> Wallet</a>-->
+                                    <!--</li>-->
+                                    <!--<li class="nav-item">-->
+                                    <!--    <a class="nav-link" id="safeer-plus-point-tab" data-bs-toggle="tab"-->
+                                    <!--        href="#safeer-plus-point" role="tab" aria-controls="safeer-plus-point"-->
+                                    <!--        aria-selected="false">Safeer Plus Point</a>-->
+                                    <!--</li>-->
                                     <li class="nav-item">
                                         <a class="nav-link" id="track-orders-tab" data-bs-toggle="tab"
                                             href="#track-orders" role="tab" aria-controls="track-orders"
@@ -119,5 +119,40 @@ Safeer | User Dashboard
     </div>
 
 </div>
+
+<script>
+window.onload = (event) => {
+  var urlParams = new URLSearchParams(window.location.search);
+    if(urlParams.has('tab')){
+        if(urlParams.get('tab') == "wishlist"){
+            // $(document).find('#wishlist-tab').trigger('click');
+            var someTabTriggerEl = document.querySelector('#wishlist-tab')
+            var tab = new bootstrap.Tab(someTabTriggerEl)
+            tab.show()
+        }
+        if(urlParams.get('tab') == "support_ticket"){
+            var someTabTriggerEl = document.querySelector('#support-tab')
+            var tab = new bootstrap.Tab(someTabTriggerEl)
+            tab.show()
+        }
+        if(urlParams.get('tab') == "profile"){
+            var someTabTriggerEl = document.querySelector('#profile-tab')
+            var tab = new bootstrap.Tab(someTabTriggerEl)
+            tab.show()
+        }
+        if(urlParams.get('tab') == "track_your_order"){
+            var someTabTriggerEl = document.querySelector('#track-orders-tab')
+            var tab = new bootstrap.Tab(someTabTriggerEl)
+            tab.show()
+        }
+        if(urlParams.get('tab') == "order_feedback"){
+            var someTabTriggerEl = document.querySelector('#feedback-tab')
+            var tab = new bootstrap.Tab(someTabTriggerEl)
+            tab.show()
+        }
+    }
+};
+    
+</script>
 
 @endsection

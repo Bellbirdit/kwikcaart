@@ -1,6 +1,6 @@
 @extends('layout/master')
 @section('title')
-Safeer | All Customers
+Kwikcaart | All Customers
 @endsection
 @section('content')
 <main class="container-fluid">

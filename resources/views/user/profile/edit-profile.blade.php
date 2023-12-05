@@ -1,16 +1,16 @@
 @extends('frontend/layout/master')
 @section('title')
-Safeer | Shop
+Kwikcaart | Shop
 @endsection
 @section('frontend/content')
 
 <div class="tab-pane fade active show" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
 
 
-<section class="content-main">
+<section class="container mt-50" style="max-width:700px">
     <div class="content-header">
         <div>
-            <h2 class="content-title card-title">Personal detail</h2>
+            <h1 class="mb-3">Personal detail</h1>
         </div>
     </div>
 
@@ -23,36 +23,36 @@ Safeer | Shop
             <form id="profile_form">
                 <input type="hidden" name="id" />
                 <div class="form-group row">
-                    <label class="col-md-2 col-form-label">Your name</label>
-                    <div class="col-md-10">
+                    <label class="col-md-4 col-form-label">Your name</label>
+                    <div class="col-md-8">
                         <input type="text" class="form-control" placeholder="Your name" name="name" id="name"
                             value="{{ $profile->name }}">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-md-2 col-form-label">Your Email</label>
-                    <div class="col-md-10">
+                    <label class="col-md-4 col-form-label">Your Email</label>
+                    <div class="col-md-8">
                         <input type="text" class="form-control" placeholder="Your email" name="email" id="email"
                             value="{{ $profile->email }}">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-md-2 col-form-label">Your Phone</label>
-                    <div class="col-md-10">
+                    <label class="col-md-4 col-form-label">Your Phone</label>
+                    <div class="col-md-8">
                         <input type="text" class="form-control" placeholder="Your Phone" name="contact" id="contact"
                             value="{{ $profile->contact }}">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-md-2 col-form-label">Photo</label>
-                    <div class="col-md-10">
+                    <label class="col-md-4 col-form-label">Photo</label>
+                    <div class="col-md-8">
                         <input type="file" name="avatar" id="avatar" value="{{ $profile->avatar }}"
                             class="selected-files">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-md-2 col-form-label">Address</label>
-                    <div class="col-md-10">
+                    <label class="col-md-4 col-form-label">Address</label>
+                    <div class="col-md-8">
                         <textarea name="address" id="address" cols="30" rows="5"
                             style="width:100%">{{ $profile->address }}</textarea>
                     </div>

@@ -1,6 +1,6 @@
 @extends('frontend/layout/master')
 @section('title')
-Safeer | Shop
+Kwikcaart | Shop
 @endsection
 @section('frontend/content')
 

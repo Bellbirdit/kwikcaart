@@ -310,7 +310,7 @@
         </div>
 
         <div class="p3">
-            <p>This email was sent by a company owned by Safeer Group, registered office at  Industrial Area 1, Near Sharjah City Center - Sharjah, UAE</p>
+            <p>This email was sent by a company owned by Kwikcaart Group, registered office at  Industrial Area 1, Near Sharjah City Center - Sharjah, UAE</p>
         </div>
     </div>
 </body>

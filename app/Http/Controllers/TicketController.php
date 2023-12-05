@@ -194,7 +194,7 @@ class TicketController extends Controller
                                     <span>' . $ticket->user->first_name . ' ' . $ticket->user->last_name . '</span>
                                     
                                 </div>
-                                <span><small class="text-muted">' . $ticket->user->email . '<small></span>
+                                <span>' . $ticket->user->email . '</span>
                             </td>
                             <td>
                                 <p class="mt-1">' . $ticket->subject . '</p>
@@ -204,6 +204,10 @@ class TicketController extends Controller
                                     <span class="badge ' . $bg . '">' . $status . '</span>
 
                                 </div>
+                            </td>
+                            
+                            <td class="text-nowrap">
+                                <p class="mt-1">' . date("d F, Y H:i A", strtotime($ticket->created_at)) . '</p>
                             </td>
 
                             <td>

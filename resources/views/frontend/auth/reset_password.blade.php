@@ -2,7 +2,7 @@
 
 @extends('frontend/layout/master')
 @section('title')
-Safeer | Forgot Password
+Kwikcaart | Forgot Password
 @endsection
 @section('frontend/content')
     <!-- Loader -->

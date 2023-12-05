@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Safeer Market</title>
+    <title>Kwikcaart</title>
    <style>
         * {
             margin: 0;
@@ -120,8 +120,8 @@
             <tr>
                 <td style="border:none; width:50%"> 
                    <div class="form1" style="padding: 0px; margin-top: -10px;line-height: 1.5;font-size: 12px !important;">
-                        <!--<img src="https://safeermarket.com/assets/imgs/theme/logo.png" style="width: 200px;" alt="">-->
-                        <h1>Safeermarket.com</h1>
+                        <!--<img src="https://kwikcaart.com/assets/imgs/theme/logo.png" style="width: 200px;" alt="">-->
+                        <h1>Kwikcaart</h1>
                         <h2>Order To:</h2>
                         <h4>{{\App\Models\User::where(['code' => $order->store_id])->pluck('email')->first()}}</h4>
                         <h4>

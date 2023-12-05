@@ -1,6 +1,6 @@
 @extends('layout/master')
 @section('title')
-Safeer | Products
+Kwikcaart | Products
 @endsection
 @section('content')
 <section class="content-main">

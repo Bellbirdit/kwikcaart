@@ -16,8 +16,6 @@ class HomeController extends Controller
 {
     
     public function home(Request $request){
-
-        
         if(isset($request->store_id))
         {
             $s = session::put('store_id',$request->store_id); 
@@ -45,6 +43,8 @@ class HomeController extends Controller
         });
         $stores = $result->orderBy('id','DESC')->get();
         $today = Carbon::today();
+        $deals = [];
+        $storedeals = [];
         $deals=Deals::where('status',0)->where('start_date','<=',$today)->where('end_date','>=', $today)->get();
        
         $today = Carbon::today();
@@ -102,17 +102,49 @@ class HomeController extends Controller
           }
         return response()->json(['status'=>"success",'html'=>$html]);
      }
-     public function get_emirates(Request $request)
+    //  public function get_emirates(Request $request)
+    //  {
+    //     $emirate = User::where('emirate',$request->emirate)->get();
+    //     $html ="";
+    //     $option="";
+    //     foreach($emirate as $store)
+    //     {
+    //         $html.='<option value="'.$store->code.'">'.$store->name.'</option>';
+    //     }
+    //     $option='<option value="" selected disabled>Select Nearest Store</option>'.$html.'';
+
+    //     return response()->json(['status'=>"success",'html'=>$option]);
+    //  }
+    
+    public function get_emirates(Request $request)
      {
         $emirate = User::where('emirate',$request->emirate)->get();
         $html ="";
         $option="";
+        if(empty($emirate)){
+            $html = '<div class="col-12 mt-3 p-1">
+                <div class="card loc py-3">
+                <div class="px-1">
+                    <p><strong> No Store Found On This Location! </strong></p>
+                </div>
+                </div>
+            </div>';
+        }
+        
         foreach($emirate as $store)
         {
-            $html.='<option value="'.$store->code.'">'.$store->name.'</option>';
+            // $html.='<li class="strore-list-link"><a href="/?store_id='.$store->code.'">'.$store->name.'</a></li>';
+            $html .= '<div class="col-6 mt-3 p-1">
+                <div class="card loc py-3">
+                <div class="px-1">
+                    <p><strong> <a href="javascript:;" class="click_here" id="'.$store->code.'">'.$store->name.'</a> </strong></p>
+                </div>
+                <small> '.$request->emirate.' </small>
+                </div>
+            </div>';
         }
-        $option='<option value="" selected disabled>Select Nearest Store</option>'.$html.'';
+        // $option='<option value="" selected disabled>Select Nearest Store</option>'.$html.'';
 
-        return response()->json(['status'=>"success",'html'=>$option]);
+        return response()->json(['status'=>"success",'html'=>$html]);
      }
 }

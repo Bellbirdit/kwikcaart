@@ -66,7 +66,11 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/cart', [CartController::class, 'view_cart'])->name('cart');
     Route::get('/incr/{id}', [CartController::class, 'increment'])->name('cart.incr');
     Route::get('/dcr/{id}', [CartController::class, 'decrement'])->name('cart.dcr');
+    
     Route::post('/place/order', [PaymentController::class, 'payment'])->name('place.order');
+    Route::get('/place/order', [PaymentController::class, 'payment'])->name('place.orderx');
+    Route::post('/place/payment_token', [PaymentController::class, 'makePaymentObjectToken'])->name('place.payment_token');
+    
     Route::get('/product/search', [ProductController::class, 'autoSearch'])->name('product.auto-search');
     Route::get('/products/qsearch', [ProductController::class, 'productSearch'])->name('products.search');
     
@@ -162,6 +166,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('cancel/order/request', [OrderController::class, 'cancelRequest']);
     
     Route::get('checkout',[CheckoutController::class,'checkoutView']);
+    Route::post('add_address',[CheckoutController::class,'addAddress']);
+    Route::get('list_address',[CheckoutController::class,'listAddress']);
+    Route::get('default_address',[CheckoutController::class,'defaultAddress']);
+    Route::get('current_address',[CheckoutController::class,'currentAddress']);
+    Route::get('delete_address',[CheckoutController::class,'deleteAddress']);
+    
     Route::get('success', [PaymentController::class, 'checkout_success'])->name('success');
 
     Route::view('role/view', 'admin/roles/role-view');
@@ -171,6 +181,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::view('feedback','admin.feedback.feedback');
 });
 Route::group(['middleware' => ['type1']], function () {
+    
+    Route::get('/bulk/uploads', [ProductController::class, 'getUploads']);
+    
     Route::get('order/detail/{id}', [OrderController::class, 'orderDetail']);
     Route::get('orders', [OrderController::class, 'getOrders']);
 

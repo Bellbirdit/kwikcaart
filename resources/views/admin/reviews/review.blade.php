@@ -1,6 +1,6 @@
 @extends('layout/master')
 @section('title')
-Safeer | Product Reviews
+Kwikcaart | Product Reviews
 @endsection
 @section('content')
 
@@ -11,28 +11,21 @@ Safeer | Product Reviews
             <!-- <p>Lorem ipsum dolor sit amet.</p> -->
         </div>
         <div>
-            <input type="text" placeholder="Search by name" class="form-control bg-white" />
+            <input type="text" name="name" placeholder="Search by name" class="form-control bg-white" />
         </div>
     </div>
     <div class="card mb-4">
         <header class="card-header">
             <div class="row gx-3">
                 <div class="col-lg-4 col-md-6 me-auto">
-                    <input type="text" placeholder="Search..." class="form-control" />
+                    <input type="text" name="query" placeholder="Search..." class="form-control" />
                 </div>
                 <div class="col-lg-2 col-md-3 col-6">
-                    <select class="form-select">
+                    <select name="status" class="form-select">
                         <option>Status</option>
                         <option>Active</option>
                         <option>Disabled</option>
                         <option>Show all</option>
-                    </select>
-                </div>
-                <div class="col-lg-2 col-md-3 col-6">
-                    <select class="form-select">
-                        <option>Show 20</option>
-                        <option>Show 30</option>
-                        <option>Show 40</option>
                     </select>
                 </div>
             </div>
@@ -85,46 +78,61 @@ Safeer | Product Reviews
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript">
+    function list(name = "", query = "", status = "", limit = "") {
+        $("#divLoader").css('display', 'block')
+        $("#divData").css('display', 'none')
+        $("#divNotFound").css('display', 'none')
+        $("#divData").html('');
+        $.ajax({
+            url: '/api/reviews/list?q='+query+"&name="+name+"&status="+status+"&limit="+limit,
+            type: "get",
+
+            dataType: "JSON",
+            cache: false,
+            beforeSend: function () {
+
+            },
+            complete: function () {
+
+            },
+            success: function (response) {
+                console.log(response);
+                if (response["status"] == "fail") {
+                    $("#divLoader").css('display', 'none')
+                    $("#divData").css('display', 'none')
+                    $("#divNotFound").css('display', 'block')
+                } else if (response["status"] == "success") {
+                    $("#divNotFound").css('display', 'none')
+                    $("#divLoader").css('display', 'none')
+                    $("#divData").css('display', 'contents')
+                    $("#divData").html(response["rows"])
+
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+    $("input").on("keyup", function(){
+        let name = $("input[name=name]").val();
+        let query = $("input[name=query]").val();
+        let status = $("select[name=status]").val();
+        let limit = $("select[name=limit]").val();
+        list(name, query, status, limit);
+    });
+    $("select").on("change", function(){
+        let name = $("input[name=name]").val();
+        let query = $("input[name=query]").val();
+        let status = $("select[name=status]").val();
+        let limit = $("select[name=limit]").val();
+        list(name, query, status, limit);
+    });
     $(document).ready(function (e) {
         var contentNotFound = $("#divNotFound");
         var contentFound = $("#divData");
         list()
-        function list() {
-            $("#divLoader").css('display', 'block')
-            $("#divData").css('display', 'none')
-            $("#divNotFound").css('display', 'none')
-            $("#divData").html('');
-            $.ajax({
-                url: '/api/reviews/list',
-                type: "get",
-
-                dataType: "JSON",
-                cache: false,
-                beforeSend: function () {
-
-                },
-                complete: function () {
-
-                },
-                success: function (response) {
-                    console.log(response);
-                    if (response["status"] == "fail") {
-                        $("#divLoader").css('display', 'none')
-                        $("#divData").css('display', 'none')
-                        $("#divNotFound").css('display', 'block')
-                    } else if (response["status"] == "success") {
-                        $("#divNotFound").css('display', 'none')
-                        $("#divLoader").css('display', 'none')
-                        $("#divData").css('display', 'contents')
-                        $("#divData").append(response["rows"])
-
-                    }
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
-        }
+        
     });
 </script>
 <script>

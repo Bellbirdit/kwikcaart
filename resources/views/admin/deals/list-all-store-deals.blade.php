@@ -1,6 +1,6 @@
 @extends('layout/master')
 @section('title')
-Safeer | All Store Deals
+Kwikcaart | All Store Deals
 @endsection
 @section('content')
 
@@ -33,11 +33,11 @@ Safeer | All Store Deals
                     <div class="row mt-5">
                         <div class="col-lg-3 ">
                             <label for="">Start Date</label>
-                            <h5> {{$swdeals->start_date}}</h5>
+                            <h5> {{ date("d F, Y", strtotime($swdeals->start_date)) }}</h5>
                         </div>
                         <div class="col-lg-3 ">
                             <label for="">End Date</label>
-                            <h5> {{$swdeals->end_date}}</h5>
+                            <h5> {{ date("d F, Y", strtotime($swdeals->end_date)) }}</h5>
                         </div>
                         <div class="col-lg-3">
                             <label for="">Change Status</label> <br>

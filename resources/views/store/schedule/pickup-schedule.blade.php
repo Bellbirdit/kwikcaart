@@ -1,6 +1,6 @@
 @extends('layout/master')
 @section('title')
-Safeer | Pickup Schedule
+Kwikcaart | Pickup Schedule
 @endsection
 @section('content')
 
@@ -47,7 +47,7 @@ Safeer | Pickup Schedule
                         <div class="row d-flex">
                             @foreach($pickupchedule as $pickschedule)
                            
-                                <h5 class="py-2">Slot Date : {{ $pickschedule->date }}
+                                <h5 class="py-2">Slot Date : {{ date("d F, Y", strtotime($pickschedule->date)) }}
                                 <a id="{{$pickschedule->id}}" href="javascript:void(0)" class="px-1 btnDelete"><i class="material-icons md-delete_forever text-danger "></i></a>
                                 </h5>
                                 <?php $pickdate = App\Models\PickupTime::where('date_id',$pickschedule->id)->get(); ?>
@@ -126,7 +126,7 @@ Safeer | Pickup Schedule
                         <select name="date_id" class="form-control" required>
                             <option value="" selected> Select Date</option>
                             @foreach($dates as $date)
-                                <option value="{{$date->id}}">{{$date->date}}</option>
+                                <option value="{{$date->id}}">{{ date("d F, Y", strtotime($date->date)) }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -154,6 +154,37 @@ Safeer | Pickup Schedule
 
 @endsection
 @section('scripts')
+<style>
+    input[type="date"]::-webkit-datetime-edit, input[type="date"]::-webkit-inner-spin-button, input[type="date"]::-webkit-clear-button {
+  color: #fff;
+  position: relative;
+}
+
+input[type="date"]::-webkit-datetime-edit-year-field{
+  position: absolute !important;
+  border-left:1px solid #8c8c8c;
+  padding: 2px;
+  color:#000;
+  left: 56px;
+}
+
+input[type="date"]::-webkit-datetime-edit-month-field{
+  position: absolute !important;
+  border-left:1px solid #8c8c8c;
+  padding: 2px;
+  color:#000;
+  left: 26px;
+}
+
+
+input[type="date"]::-webkit-datetime-edit-day-field{
+  position: absolute !important;
+  color:#000;
+  padding: 2px;
+  left: 4px;
+  
+}
+</style>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
           $("#pickupdate_form").on('submit', (function(e) {

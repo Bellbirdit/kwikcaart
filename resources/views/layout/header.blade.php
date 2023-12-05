@@ -90,8 +90,31 @@
                             class="material-icons md-perm_identity"></i>Profile</a>
 
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item text-danger" href="{{ route('login') }}"><i
+                    <a class="dropdown-item text-danger " href="{{ route('login') }}"><i
                             class="material-icons md-exit_to_app"></i>Logout</a>
+                            
+                             <!--<div class="cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">-->
+                             <!--           <ul>-->
+                             <!--               <li>-->
+                             <!--                   <a href="page-account.html"><i class="fi fi-rs-user mr-10"></i>My Account</a>-->
+                             <!--               </li>-->
+                             <!--               <li>-->
+                             <!--                   <a href="page-account.html"><i class="fi fi-rs-location-alt mr-10"></i>Order Tracking</a>-->
+                             <!--               </li>-->
+                             <!--               <li>-->
+                             <!--                   <a href="page-account.html"><i class="fi fi-rs-label mr-10"></i>My Voucher</a>-->
+                             <!--               </li>-->
+                             <!--               <li>-->
+                             <!--                   <a href="shop-wishlist.html"><i class="fi fi-rs-heart mr-10"></i>My Wishlist</a>-->
+                             <!--               </li>-->
+                             <!--               <li>-->
+                             <!--                   <a href="page-account.html"><i class="fi fi-rs-settings-sliders mr-10"></i>Setting</a>-->
+                             <!--               </li>-->
+                             <!--               <li>-->
+                             <!--                   <a href="page-login.html"><i class="fi fi-rs-sign-out mr-10"></i>Sign out</a>-->
+                             <!--               </li>-->
+                             <!--           </ul>-->
+                             <!--       </div>-->
                 </div>
             </li>
         </ul>

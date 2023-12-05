@@ -1,13 +1,13 @@
 @extends('frontend/layout/master')
 @section('title')
-Safeer | Cart
+Kwikcaart | Cart
 @endsection
 @section('frontend/content')
 
 <style>.quantity {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   padding: 0;
 }
 .quantity__minus,
@@ -56,7 +56,7 @@ Safeer | Cart
 </style>
 <main class="main">
         <section>
-            <div class="container-fluid">
+            <div class="container">
                 <div class="page-header breadcrumb-wrap">
                     <div class="container-fluid">
                         <div class="breadcrumb">
@@ -69,7 +69,7 @@ Safeer | Cart
                 <div class="container-fluid mb-80 mt-50">
                     <div class="row"> 
                         <div class="col-lg-8 mb-40">
-                            <h4 class="heading-2 mb-10">Your Cart</h4>
+                            <h4 class="heading-2 mb-10">Your order</h4>
                             <div class="d-flex justify-content-between">
                             @php 
                                 $count=app\Models\Cart::where('user_id',auth()->user()->id)->where('store_id', Session::get('store_id'))->where('status','pending')->count(); 
@@ -79,17 +79,36 @@ Safeer | Cart
                         </div>
                     </div>
                     <div class="row">
+                        
                         <div class="col-lg-8">
+                            <div class=" border p-md-4 cart-totals ml-30">
+                            <div class="row" style="font-weight: bold;">
+                                <div class="col-md-6">
+                                    <h2>Products</h2>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row mb-3" >
+                                        <div class="col-md-5">Unit price</div>
+                                         <div class="col-md-2">Quantity</div>
+                                          <div class="col-md-2">Subtotal</div>
+                                           <div class="col-md-2">Remove</div>
+                                    </div>
+                                </div>
+                                
+                                
+                            </div>
                             <div class="">
-                              
+                                    @php 
+                                    $total = 0;
+                                    @endphp
                                     <div class="row">
                                         @if(sizeof($carts) > 0)
                                         @foreach($carts as $cart)
-                                         <div class="col-md-3 p-3 ">
-                                             <div class="card p-3">
-                                                <div class="image product-thumbnail pt-40"><img src="{{asset('uploads/files/'.$cart->image)}}" alt="#"></div>
-                                                <div class="product-des product-name">
-                                                    <p class="mb-5"><a class="" href="javascript:;">{{$cart->name}}</a></p>
+                                         <div class="col-md-12">
+                                             <div class="row ">
+                                                <div class="image product-thumbnail col-md-1"><img src="{{asset('uploads/files/'.$cart->image)}}" alt="#" ></div>
+                                                <div class="product-des product-name col-md-5">
+                                                    <p class="mb-5"><a class="pname" href="javascript:;">{{$cart->name}}</a></p>
                                                     <!-- <div class="product-rate-cover">
                                                         <div class="product-rate d-inline-block">
                                                             <div class="product-rating" style="width:90%">
@@ -98,20 +117,9 @@ Safeer | Cart
                                                         <span class="font-small ml-5 text-muted"> (4.0)</span>
                                                     </div> -->
                                             </div>
-                                                <div class="row">
-                                                    <div class="price col-md-7" data-title="Price">
-                                                    <p class="">Unit Price : {{round($cart->price,2)}} </p>
-                                                </div>
-                                                
-                                                <div class="text-center detail-info col-md-5" data-title="Stock">
-                                                            <div class="quantity">
-                                                                <a href="{{ route('cart.dcr',$cart->id) }}" class="quantity__minus"><span class="text-dark">-</span></a>
-                                                                <input name="quantity" type="text" style="border:none" value="{{ $cart->quantity }}" class="quantity__input">
-                                                                <a href="{{ route('cart.incr',$cart->id) }}" class="quantity__plus"><span class="text-dark">+</span></a>
-                                                            </div>
-            
-                                                </div>
                                                 <?php $vat =  App\Models\Product::where('id',$cart->product_id)->first();
+                                                    $priceArray = $vat->get_deal_price();
+                                                    $price = $priceArray['price'];
                                                      if($vat->vat_status == 'yes' )
                                                      {
                                                         $vat_price = DB::table('web_settings')->pluck('vat')->first();
@@ -124,12 +132,35 @@ Safeer | Cart
                                                         $vat_price = 0;
                                                      }
                                                 ?>
-                                                <div><p class=" col-md-12 py-2">Vat : </p></div>
-                                                <div class="price col-md-8 py-2" data-title="Price">
-                                                    <p class="">Subtotal : {{round($cart->quantity*$cart->price,2)}} </p>
+                                              <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="price col-md-5 col-5" data-title="Price">
+                                                    <p class="">AED {{$price}} </p>
+                                                    </div>
+                                                
+                                                    <div class="text-center detail-info col-md-7 col-7" data-title="Stock">
+                                                            <div class="row">
+                                                                <div class="col-3 quantity ">
+                                                                <a href="{{ route('cart.dcr',$cart->id) }}" class="quantity__minus"><span class="text-dark">-</span></a>
+                                                                <input name="quantity" type="text" style="border:none" value="{{ $cart->quantity }}" class="quantity__input">
+                                                                <a  href="{{ route('cart.incr',$cart->id) }}" class="quantity__plus"><span class="text-dark">+</span></a>
+                                                                </div>
+                                                                <div class="col-4">
+                                                                 @php
+                                                    $total += $cart->quantity*$price;
+                                                    @endphp
+                                                    <span style="margin: 0 15px;font-weight: bold;width:40px; ">  {{round($cart->quantity*$price,2)}} </span>
+                                                                </div>
+                                                                <div class="col-3">
+                                                                <a style="margin-left:5px" id="{{ $cart->id }}" class="remove_item text-body"><i class="fi-rs-trash"></i></a>
+                                                                </div>
+                                                            </div>
+            
+                                                    </div>
+                                                
+                                                 
+                                                    <!--<div class="action text-center col-md-4 py-2"  data-title="Remove"><a id="{{ $cart->id }}" class="remove_item text-body"><i class="fi-rs-trash"></i></a></div>-->
                                                 </div>
-                                                <div class="action text-center col-md-4 py-2"  data-title="Remove"><a id="{{ $cart->id }}" class="remove_item text-body"><i class="fi-rs-trash"></i></a></div>
-                                             
                                             </div>
                                              </div>
                                             
@@ -163,64 +194,17 @@ Safeer | Cart
                             </div>
                             </div>
                         </div>
+                        </div>
                         <div class="col-lg-4">
                             <div class="border p-md-4 cart-totals ml-30">
+                                <h2 class="mb-3">Order Summary</h2>
                                 <div class="table-responsive">
-                                    <table class="table no-border">
-                                        <tbody>
-                                            <tr>
-                                                <td class="cart_total_label">
-                                                    <p >Subtotal</p>
-                                                </td>
-                                       
-                                                <td class="cart_total_amount">
-                                                    <h4 class=" text-end">{{round($subtotal,2)}}</h4>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="cart_total_label">
-                                                    <p >Coupan Discount</p>
-                                                </td>
-        
-                                                <td class="cart_total_amount">
-                                                    <h4 class=" text-end">{{round($coupondiscount,2)}}</h4>
-                                                </td>
-                                                
-                                            </tr>
-        
-                                            <!-- <tr>
-                                                <td class="cart_total_label">
-                                                    <p >Shipping Charges</p>
-                                                </td>
-        
-                                                <td class="cart_total_amount">
-                                                    <h4 class=" text-end">{{round($deliverycharges,2)}}</h4>
-                                                </td>
-                                                
-                                            </tr>
-                                            <tr>
-                                                <td class="cart_total_label">
-                                                    <p >VAT</p>
-                                                </td>
-        
-                                                <td class="cart_total_amount">
-                                                    <h4 class=" text-end"></h4>
-                                                </td>
-                                                
-                                            </tr> -->
-                                           
-                                            <tr>
-                                                <td class="cart_total_label">
-                                                    <p>Total</p>
-                                                </td>
-        
-                                                <td class="cart_total_amount">
-                                                    <h4 class=" text-end">{{round($grandtotal,2)}}</h4>
-                                                </td>
-                                                
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                   
+                                    
+                                    
+                                    <div style="border-radius:15px; border:1px solid #ccc; padding:10px; margin-bottom:15px; background:#f2f2f2">
+                                         <h4 class=" text-end">AED {{round($total-$coupondiscount+$deliverycharges,2)}} <br><span style="font-size:12px">(inclusive of VAT)</span></h4>
+                                    </div>
                                 </div>
                                 @if(sizeof($carts) > 0)
                                     <a href="/checkout" class="btn mb-20 w-100">Proceed To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>

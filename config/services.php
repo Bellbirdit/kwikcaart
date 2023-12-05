@@ -23,7 +23,7 @@ return [
         'google' => [
             'client_id' => env('GOOGLE_CLIENT_ID'),
             'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-            'redirect' => 'https://safeermarket.com/auth/google/callback',
+            'redirect' => 'https://kwikcaart.com/auth/google/callback',
         ],
         
     'mailgun' => [

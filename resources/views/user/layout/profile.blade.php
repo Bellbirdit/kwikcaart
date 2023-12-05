@@ -8,6 +8,7 @@
             <div class="card1">
                 @foreach($profile as $pro)
                     <div class="card-body bg-white">
+                        <h1 class="mb-3">My Profile</h1>
                         <div class="row">
                             <div class="col-2 my-auto">
                                 @if($pro->avatar != '')
@@ -51,7 +52,7 @@
                     
                     <div class="card-body">
                         <div class="card-header  text-end">
-                            <a href="javascript:;" class="btn btn-icon  mt-3" data-bs-target="#addnewAddress "
+                            <a href="javascript:;" class="btn btn-org btn-icon  mt-3" data-bs-target="#addnewAddress "
                                 data-bs-toggle="modal">
                                 Add Address<i class="fas fa-plus tx-12"></i>
                             </a>

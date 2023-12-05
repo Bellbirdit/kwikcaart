@@ -164,10 +164,16 @@ class AuthController extends Controller
             if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
                 $type = Auth::user()->type;
                 $user = Auth::user();
+                if($user->status == "active"){
+                    Auth::user()->save();
+                    $responseArray = $user->createToken('app')->accessToken;
+                    return response()->json(['status' => 'success', 'type' => $type, 'user' => $user, 'token' => $responseArray, 'msg' => 'You have successfully login']);    
+                }else{
+                    Auth::logout();
+                    return response()->json(['status'=>'fail','msg'=>"Inactive user found!"]);        
+                }
                 // Auth::user()->last_login = Carbon::now();
-                Auth::user()->save();
-                $responseArray = $user->createToken('app')->accessToken;
-                return response()->json(['status' => 'success', 'type' => $type, 'user' => $user, 'token' => $responseArray, 'msg' => 'You have successfully login']);
+                
             }        }catch(\Exception $exception ){
             return response()->json([
                 'status'=>'server',
@@ -454,7 +460,7 @@ public function sendOtps(Request $request)
             $numbers = implode(',', $numbers);
             $client = ('Safeer.Group');
             $sender = urlencode('Safeermrket');
-            $message = rawurlencode('Your Safeer Market OTP is: 3456');
+            $message = rawurlencode('Your Kwikcaart OTP is: 3456');
             $data = array('ApiKey' => $apiKey, 'MobileNumbers' => $numbers,'ClientId'=>$client,'SenderId' => $sender, 'message' => $message);
            
             $ch = curl_init('http://162.214.103.200:6005/api/v2/SendSMS');

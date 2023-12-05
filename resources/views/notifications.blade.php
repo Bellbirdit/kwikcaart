@@ -1,6 +1,6 @@
 @extends('layout/master')
 @section('title')
-Safeer Market | Notifications
+Kwikcaart | Notifications
 @endsection
 @section('content')
 <!-- breadcrumb -->

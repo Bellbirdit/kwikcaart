@@ -1,6 +1,6 @@
 @extends('layout/master')
 @section('title')
-Safeer | Trending Categories
+Kwikcaart | Trending Categories
 @endsection
 @section('content')
 

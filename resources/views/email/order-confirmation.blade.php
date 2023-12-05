@@ -299,7 +299,7 @@
             <div class="title">
                 <!-- <h1>Safeer MArkeet</h1> -->
             </div>
-            <div class="img"><img src="https://safeermarket.com/public/uploads/all/xWgimxUkfX1qzd8FzibEs42udwJOcq7EeLvFqa5k.png" id="image" width="350px" alt=""></div>
+            <div class="img"><img src="https://kwikcaart.com/public/uploads/all/xWgimxUkfX1qzd8FzibEs42udwJOcq7EeLvFqa5k.png" id="image" width="350px" alt=""></div>
             <div class="text">
                 <h1 >Order successfully!</h1>
                 <p>{{$order->first_name}} {{$order->last_name}}</p>
@@ -332,7 +332,7 @@
         </div>
 
         <div class="p3">
-            <p>This email was sent by a company owned by Safeer Group, registered office at  Industrial Area 1, Near Sharjah City Center - Sharjah, UAE</p>
+            <p>This email was sent by a company owned by Kwikcaart Group, registered office at  Industrial Area 1, Near Sharjah City Center - Sharjah, UAE</p>
         </div>
     </div>
 </body>

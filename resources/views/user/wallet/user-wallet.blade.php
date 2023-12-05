@@ -1,6 +1,6 @@
 @extends('user/layout/master')
 @section('title')
-Safeer | Wallet
+Kwikcaart | Wallet
 @endsection
 @section('content')
 

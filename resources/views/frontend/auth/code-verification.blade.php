@@ -38,7 +38,7 @@
                         <form id="form">
                             <div class="card width-100 m-t-b-50 shadow">
                                 <div class="card-header  py-4" style="background-color:#000000; ">
-                                    <h4 class="card-title text-center m-0" style="color:white  !important;">Safeer Market Acccount Verification</h4>
+                                    <h4 class="card-title text-center m-0" style="color:white  !important;">Kwikcaart Acccount Verification</h4>
                                 </div>
                                 <div class="card-body p-5">
                                     <div>

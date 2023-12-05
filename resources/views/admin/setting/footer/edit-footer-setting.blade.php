@@ -1,6 +1,6 @@
 @extends('layout/master')
 @section('title')
-Safeer | Footer Setting
+Kwikcaart | Footer Setting
 @endsection
 @section('content')
 

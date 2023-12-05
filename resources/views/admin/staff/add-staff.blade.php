@@ -1,6 +1,6 @@
 @extends('layout/master')
 @section('title')
-Safeer | Admin Staff
+Kwikcaart | Admin Staff
 @endsection
 @section('content')
 

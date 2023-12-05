@@ -1,6 +1,6 @@
 @extends('frontend/layout/master')
 @section('title')
-Safeer | Login
+Kwikcaart | Login
 @endsection
 @section('frontend/content')
 <style>
@@ -31,7 +31,7 @@ Safeer | Login
                        <div class="input-group mb-3">
                             <input class="form-control" placeholder="Password" id="password-input" type="password" name="password" />
                             <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button" id="password-toggle">
+                                <button class="btn btn-outline-secondary" style="height: 100%;background: black;" type="button" id="password-toggle">
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>

@@ -1,6 +1,6 @@
 @extends('frontend/layout/master')
 @section('title')
-Safeer | Homee
+Kwikcaart | Homee
 @endsection
 @section('frontend/content')
 <style>

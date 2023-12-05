@@ -39,6 +39,7 @@ class ProductController extends Controller
 
 
         try {
+            foreach($request->store_id as $store_id){
             $slug = Str::slug($request->name, '-');
             $product = new Product();
             $product->added_by = 'Admin';
@@ -52,7 +53,7 @@ class ProductController extends Controller
             $product->barcode = $request->barcode;
             $product->category_id = $request->category;
             $product->brand_id = $request->brand;
-            $product->store_id = $request->store_id;
+            $product->store_id = $store_id;
             $product->short_description = $request->short_description;
             $product->description = $request->description;
             $product->vat_status = $request->vat_status;
@@ -113,6 +114,7 @@ class ProductController extends Controller
             $store_product->barcode = $product->barcode;
             $store_product->save();
             return response()->json(['status' => 'success', 'msg' => 'Product Added Successfully']);
+            }
         } catch (\Exception $e) {
             return response()->json(['status' => 'fail', 'msg' => $e->getMessage() . $e->getLine()]);
         }
@@ -253,7 +255,6 @@ class ProductController extends Controller
                                 </div>
                                 <div class="col-lg-2 col-sm-1 col-4 col-status">
                                     <a  href="/product/edit/' . $product->id . '" class="px-1"><i class="material-icons md-edit"></i></a>
-                                    <a href="javascript:void(0)" class="px-1"><i class="material-icons md-delete_forever text-danger btnDelete" id="' . $product->id . '"></i></a>
                                 </div>
                 ';
             }
@@ -276,6 +277,15 @@ class ProductController extends Controller
         $reviews = Review::where('product_id', $id)->get();
         return view('admin.products.reviews_list', compact('reviews', 'id'));
     }
+    
+    public function getUploads(Request $request){
+        $query = $request->get('q');
+        $page = $request->input('page') ?? 1;
+        $perPage = 10; // Number of products to return per page
+        $uploads = \App\Models\BulkUpload::orderBy('id', "desc")->paginate($perPage, ['*'], 'page', $page);
+        return view('admin.products.upload_lists', compact('uploads'));
+    }
+    
     public function edit($id)
     {
         $products = Product::find($id);
@@ -397,18 +407,47 @@ class ProductController extends Controller
     public function import(Request $request)
     {
         try {
-            $path = $request->file('file');
+            $file = $request->file('file');
+   
+            $name = $file->getClientOriginalName();
+            $extension = $file->getClientOriginalExtension();
+            $realPath = $file->getRealPath();
+            $size = $file->getSize();
+            $mimeType = $file->getMimeType();
+           
+            $destinationPath = storage_path('app/uploads');
+            $filename = time().".".$extension;
+            // $path = $destinationPath.$filename;
             
-            $importProductsArray = Excel::toArray(new ProductImport, $path);
+            $file->move($destinationPath, $filename);
+             
+            // \App\Models\BulkUpload::create([
+            //     'name' => $name,
+            //     'filename' => $filename,
+            //     'user_id' => Auth::user()->id,
+            //     'type' => 'BulkProductUpload',
+            // ]);
+        //   dd($path);
+        //     $path = $request->file('file');
+        //     $importProductsArray = Excel::toArray(new ProductImport, $path);
             
-            // Import products from Excel file
-            Excel::import(new ProductImport, $path);
+        //     // Import products from Excel file
+        //     // Excel::import(new ProductImport, $path);
             
-            // Get all products
-            // $products = Product::all();
+        //     // Get all products
+        //     // $products = Product::all();
+            
+        //     foreach($importProductsArray as $importProducts){
+        //         foreach($importProducts as $importProduct){    
+        //             // $this->importProductStore($importProduct);    
+        //         }
+        //     }
+        
+            Excel::import(new ProductImport, $destinationPath."/".$file);
             
             foreach($importProductsArray as $importProducts){
                 foreach($importProducts as $importProduct){    
+                    $upload->increment('processed');   
                     $this->importProductStore($importProduct);    
                 }
             }
@@ -443,15 +482,23 @@ class ProductController extends Controller
             $pr->save();
             foreach ($u as $s) {
                 // Check if a record with the same barcode already exists in the StoreProducts table
-                $existingStoreProduct = StoreProducts::where('product_id', $pro->id)->where('store_id', $s->code)->where('barcode', $pro->barcode)->first();
+                $existingStoreProducts = StoreProducts::where('product_id', $pro->id)->where('store_id', $s->code)->where('barcode', $pro->barcode)->get();
                 // If no record exists, create a new one for each user with a "Store" role
-                if (!$existingStoreProduct) {
+                if($existingStoreProducts->isEmpty()){
                     $store_product = new StoreProducts();
                     $store_product->product_id = $pro->id;
                     $store_product->store_id = $s->code;
                     $store_product->stock = $pro->stock;
                     $store_product->barcode = $pro->barcode;
                     $store_product->save();
+                }else{
+                    foreach($existingStoreProducts as $existingStoreProduct){
+                        $existingStoreProduct->product_id = $pro->id;
+                        $existingStoreProduct->store_id = $s->code;
+                        $existingStoreProduct->stock = $pro->stock;
+                        $existingStoreProduct->barcode = $pro->barcode;
+                        $existingStoreProduct->save();
+                    }    
                 }
             }
         }
@@ -674,11 +721,13 @@ class ProductController extends Controller
     {
         $store_id = Session::get('store_id');
         $storeproduct = StoreProducts::where('store_id', $request->store_id)->where('stock', 'yes')->first();
-    
+        $storeproducts = StoreProducts::where('store_id', $store_id)->where('stock', 'yes')->pluck('product_id');
         $query = $request->get('query');
-        
+        // \DB::enableQueryLog(); // Enable query log
+
         $products = Product::where('name', 'like', '%' . $query . '%')
             ->where('published', 1)
+            ->whereIn('id', $storeproducts)
             ->where('stock', 'yes');
         
         // Check if $storeproduct is not null before adding the barcode condition
@@ -687,7 +736,9 @@ class ProductController extends Controller
         }
         
         $products = $products->get();
-    
+        
+    // dd(\DB::getQueryLog()); // Show results of log
+
         return response()->json($products);
     }
 
@@ -705,7 +756,7 @@ class ProductController extends Controller
     public function search(Request $request)
     {
         $query = $request->get('q');
-        $products = Product::where('name', 'like', '%' . $query . '%')->get();
+        $products = Product::where('name', 'like', '%' . $query . '%')->orWhere('barcode', trim($query))->get();
         return response()->json($products);
     }
 }

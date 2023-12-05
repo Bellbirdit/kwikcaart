@@ -16,6 +16,12 @@ class Order extends Model
 	public function orderItem(){
 		return $this->hasMany('App\Models\OrderItem');
 	}
+	
+	public function orderActivity(){
+		return $this->hasMany('App\Models\OrderActivity', 'order_id')->orderBy('id', 'asc');
+// 		return $this->belongsToMany(Product::class,'order_items','order_id','product_id');
+	}
+	
 	public function payment(){
 		return $this->hasOne('App\Models\Payment');
 	}

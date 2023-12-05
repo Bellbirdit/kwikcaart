@@ -23,14 +23,19 @@ class ProductStorewise implements ToModel, WithHeadingRow, WithChunkReading
     * @return \Illuminate\Database\Eloquent\Model|null
     */
     public function model(array $row)
-    {
-        
+    {       
+        // \DB::enableQueryLog(); // Enable query log
 
-       
-           $storeproduct= StoreProducts::where('store_id',$row['store_code'])->where('barcode',(float)$row['barcode'])->first();
-           $storeproduct->stock = $row['stock'];
-          
-           $storeproduct ->save();
+            $result = \DB::table('store_products')->where('store_id', (string)$row['store_code'])->where('barcode', (string)$row['barcode'])->update(array('stock'=>$row['stock']));
+        //   $storeproducts= StoreProducts::where('store_id',$row['store_code'])->where('barcode',$row['barcode'])->get();
+
+        //   dd($row, $result, "1", \DB::getQueryLog());
+        //   foreach($storeproducts as $storeproduct){
+        //         $storeproduct ->save([
+        //             'stock' => $row['stock']
+        //         ]);    
+        //   }
+           
         
     }
     public function chunkSize(): int

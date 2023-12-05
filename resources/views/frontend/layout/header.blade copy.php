@@ -3,11 +3,15 @@
 <div class="modal fade custom-modal" id="onloadModal" tabindex="-1" aria-labelledby="onloadModalLabel"
     aria-hidden="true">
     <div class="modal-dialog">
+        
+        
         <div class="modal-content">
+            
+             <i class="fa fa-window-close" aria-hidden="true" style="    position: absolute;    top: 10px;    right: 10px;">close</i>
             <div class="modal-body text-center">
                 <div class="">
                     <div class="col-md-12">
-                        <h6 class="py-2">Auto Select the Nearest Store </h6>
+                        <h6 class="py-2">Auto Select the Nearest Store??????? </h6>
                         <button type="button" id="btnAction" onClick="locate()" class="btn mt-3 location-btn "><img
                                 class="mx-2 "
                                 src="{{ asset('frontend/assets/imgs/theme/icons/icon-location.svg') }}"
@@ -91,8 +95,8 @@
                                 <li><a href="#">Express Delivery</a></li>
                                 <li><a href="#"> Order & Collect</a></li>
                                 <li><a href="#">Home Delivery</a></li>
-
-                                <li><a href="{{ url('/login') }}">Login</a></li>
+                                <li><a href="{{ url('/login') }}" class="lable">Login</a>
+                                </li>
                                 <li><a href="{{ url('/register') }}">Registration</a></li>
                             </ul>
                         @else
@@ -149,8 +153,8 @@
                                 <p class="py-2"><span>{{ $store_name }} <i class="fi-rs-angle-down"></i></span></p>
                             </div>
                             <div class="dropdown-menu location-div" aria-labelledby="dropdownMenuLink">
-                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                        data-bs-target="#onloadModal">Change Store</a></li>
+                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                        data-bs-target="#onloadModal">Change Store</a>
                             </div>
                             @if(auth::check())
                                 <div class="header-action-icon-2">

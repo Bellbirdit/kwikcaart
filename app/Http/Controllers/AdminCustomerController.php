@@ -132,7 +132,7 @@ class AdminCustomerController extends Controller
     }
     public function orderFeedback(Request $request)
     {
-        $feedback = Feedback::all();
+        $feedback = Feedback::orderBy('id', 'DESC')->get();
         if ($feedback->count() > 0) {
             $html = "";
             foreach ($feedback as $fedback) {
@@ -142,6 +142,7 @@ class AdminCustomerController extends Controller
                     <td>'.$fedback->order_number.'</td>
                     <td>'.$fedback->heading.'</td>
                     <td>'.$fedback->description.'</td>
+                    <td>'.date('d F, Y', strtotime($fedback->created_at)).'</td>
                     
                 </tr>
                 ';

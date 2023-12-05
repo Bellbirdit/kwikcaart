@@ -720,6 +720,7 @@ body {
   line-height: 24px;
   font-style: normal;
   font-weight: 400;
+ 
 }
 
 h1,
@@ -2663,6 +2664,7 @@ input.qty-val {
   border: none;
 }
 
+
 .nav-tabs.right .nav-item:last-child .nav-link {
   margin-right: 0;
 }
@@ -2673,6 +2675,9 @@ input.qty-val {
           justify-content: end;
 }
 
+.dashboard-menu{
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 4px 0px;
+}
 .dashboard-menu ul {
   padding: 0;
   margin: 0;
@@ -2709,9 +2714,9 @@ input.qty-val {
   color: #fff;
 }
 
-.dashboard-menu ul li:not(:last-child) {
-  margin-bottom: 10px;
-}
+/*.dashboard-menu ul li:not(:last-child) {*/
+/*  margin-bottom: 10px;*/
+/*}*/
 
 .tab-header {
   display: -webkit-box;
@@ -2748,6 +2753,10 @@ input.qty-val {
           transform: translateX(5px);
   -webkit-transition: 0.5s;
   transition: 0.5s;
+}
+
+.dashboard-menu {
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 4px 0px;
 }
 
 /*COMPONENTS -> MISC*/
@@ -9718,6 +9727,8 @@ footer .hotline img {
 
 .footer-mid .widget-title {
   margin: 15px 0 20px 0;
+  font-size:16px;
+  font-weight:bold;
 }
 
 /*LAYOUT -> SPACING**/

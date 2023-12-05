@@ -1,7 +1,7 @@
 @extends('layout/master')
 
 @section('title')
-Safeer | Coupon list
+Kwikcaart | Coupon list
 @endsection
 @section('content')
 <section class="content-main">

@@ -110,7 +110,28 @@ class ReviewController extends Controller
 
     public function getReviews(Request $request)
     {
-        $reviews = Review::all();
+        $reviews = Review::query();
+        $reviews = $reviews->with('product');
+        if($request->q){
+            $reviews->leftJoin('products as p',
+                        function ($join) {
+                            $join->on('p.id', '=', 'reviews.product_id');
+                        })
+                        ->where('p.name', 'like', "%{$request->q}%");
+            // $reviews = $reviews->where('review', 'like', "%{$request->q}%");
+            // $reviews = $reviews->where('product.name', 'like', "%{$request->q}%");
+        }
+        if($request->name){
+            $reviews = $reviews->where('name', 'like', "%{$request->name}%");
+        }
+        if($request->status == "Active"){
+            $reviews = $reviews->where('status', 1);
+        }
+        if($request->status == "Disabled"){
+            $reviews = $reviews->where('status', 0);
+        }
+        
+        $reviews = $reviews->get();
         if (isset($reviews) && sizeof($reviews) > 0) {
         $html = "";
       
@@ -150,7 +171,7 @@ class ReviewController extends Controller
                     </li>
                 </ul>
             </td>
-            <td>10.03.2020</td>
+            <td>'.$review->created_at->format('d M, Y').'</td>
 
             <td>
             <label class="switch">

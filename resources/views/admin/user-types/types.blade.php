@@ -1,6 +1,6 @@
 @extends('layout/master')
 @section('title')
-Safeer | User Types
+Kwikcaart | User Types
 @endsection
 @section('content')
 <!-- breadcrumb -->

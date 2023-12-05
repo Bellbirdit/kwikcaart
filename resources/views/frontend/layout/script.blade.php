@@ -108,8 +108,8 @@ $(document).on('click', '.remove', function () {
 
 });
 
-        $(document).on('click', '.change_emirate', function () {
-            $(".select_store").html('')
+        $(document).on('change', '.change_emirate', function () {
+            // $(".select_store").html('')
             var emirate = $('.change_emirate option:selected').val();
             $.ajax({
                 url: "/get/emirates/",

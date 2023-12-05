@@ -1,6 +1,6 @@
 @extends('frontend/layout/master')
 @section('title')
-Safeer | All Categories
+Kwikcaart | All Categories
 @endsection
 @section('frontend/content')
 <style>

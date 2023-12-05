@@ -1,27 +1,4 @@
 <footer class="main">
-    <section class="newsletter mb-15">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="position-relative newsletter-inner">
-                        <div class="newsletter-content">
-                            <h2 class="mb-20">
-                                Stay home & get your daily <br />
-                                needs from our shop
-                            </h2>
-                            <p class="mb-45">Start You'r Daily Shopping with <span class="text-brand">Safeer Market</span></p>
-                            <form class="form-subcriber d-flex">
-                                <input type="email" placeholder="Your emaill address" />
-                                <button class="btn" type="submit">Subscribe</button>
-                            </form>
-                        </div>
-                        <img src="{{ asset('frontend/assets/imgs/banner/banner-9.png') }}"
-                            alt="newsletter" />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
     <section class="section-padding footer-mid">
         <div class="container-fluid pt-15 pb-20">
             <div class="row">
@@ -78,6 +55,10 @@
                                     <!-- <strong>Hours:</strong><span>10:00 - 18:00, Mon - Sat</span> -->
                                 </li>
                             </ul>
+                            <form class="form-subcriber">
+                                <input type="email" placeholder="Your emaill address" />
+                                <button class="btn" style="margin-top:10px;" type="submit">Subscribe</button>
+                            </form>
                         </div>
                         <div class="footer-link-widget col"
                             data-wow-delay=".1s">
@@ -107,7 +88,7 @@
                     <h4 class="widget-title">Our Services</h4>
                     <ul class="footer-list mb-sm-5 mb-md-0">
                         <!--<li><a href="">Brands</a></li>-->
-                        <li><a href="{{ $fcontent->safeer_plus }}">Safeer Plus</a></li>
+                        <!--<li><a href="{{ $fcontent->safeer_plus }}">Safeer Plus</a></li>-->
                         <li><a href="{{ $fcontent->faq }}">FAQs</a></li>
                         <li><a href="{{ $fcontent->our_stores }}">Our Stores</a></li>
                         <li><a href="{{ $fcontent->return_policy }}">Return & Exchange Policy</a></li>
@@ -126,7 +107,7 @@
                         <div class="footer-bottom"></div>
                     </div>
                     <div class="col-xl-4 col-lg-6 col-md-6">
-                        <p class="font-sm mb-0">&copy; 2023, <strong class="text-brand">Safeer Market</strong> -All
+                        <p class="font-sm mb-0">&copy; 2023, <strong class="text-brand">Kwikcaart</strong> -All
                             rights reserved</p>
                     </div>
                     <div class="col-xl-4 col-lg-6 text-center d-none d-xl-block">
@@ -144,16 +125,13 @@
                             <a href="{{ $fcontent->instagram }}"><img
                                     src="{{ asset('frontend/assets/imgs/theme/icons/icon-instagram-white.svg') }}"
                                     alt="" /></a>
-                            <a href="#"><img
-                                    src="{{ asset('frontend/assets/imgs/theme/icons/icon-pinterest-white.svg') }}"
-                                    alt="" /></a>
-                            <a href="{{ $fcontent->youtube }}"><img
-                                    src="{{ asset('frontend/assets/imgs/theme/icons/icon-youtube-white.svg') }}"
-                                    alt="" /></a>
                         </div>
                     </div>
                 </div>
             @endforeach
         @endif
     </div>
+    
+    
+
 </footer>

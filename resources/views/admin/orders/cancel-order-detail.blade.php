@@ -1,6 +1,6 @@
 @extends('layout/master')
 @section('title')
-Safeer | Return Order Detail
+Kwikcaart | Return Order Detail
 @endsection
 @section('content')
 @if(isset($orders) && !empty($orders))

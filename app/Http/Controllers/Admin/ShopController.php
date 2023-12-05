@@ -131,18 +131,16 @@ class ShopController extends Controller
 
         $img2 = $product->getImage($product->galleryimg2);
         $file2 = asset('uploads/files/' . $img2);
-        if ($product->price != $product->discounted_price) {
-            $discount = '<div class="product-price">
-                <span>AED ' . $product->discounted_price . '</span>
-                <span class="old-price">' . $product->price . '</span>
-            </div>';
-        } else {
-            $discount = ' <div class="product-price">
-                <span>AED ' . $product->discounted_price . '</span>
-            </div>';
-        }
+        $priceArray = $product->get_deal_price();
+            $price = $priceArray['price'];
+        $discount = '<div class="product-price">
+                <span>AED ' . $price . '</span>';
+            if(isset($priceArray['old_price'])){
+                $discount .= '<span class="old-price">' . $priceArray['old_price'] . '</span>';        
+            }
+            $discount .= '</div>';
 
-       $html .= '<div class="col-lg-1-5 col-md-4 col-12 col-sm-6 d-none d-xl-block">
+       $html .= '<div class="col-lg-1-5 col-md-4 col-12 col-sm-6 d-xl-block">
             <div class="product-cart-wrap mb-30">
                 <div class="product-img-action-wrap">
                    <div class="product-action-1 top-left">
@@ -523,7 +521,7 @@ class ShopController extends Controller
             ->where('stock', 'yes')
             ->first();
         
-        $products = Product::join('store_products', 'products.barcode', '=', 'store_products.barcode')
+        $products = Product::select('products.*')->join('store_products', 'products.barcode', '=', 'store_products.barcode')
             ->where('products.category_id', $request->category_id)
             ->where('products.stock', 'yes')
             ->where('products.published', 1)
@@ -562,17 +560,15 @@ class ShopController extends Controller
             $file = asset('uploads/files/' . $img);
             $img2 = $product->getImage($product->galleryimg2);
             $file2 = asset('uploads/files/' . $img2);
-            if ($product->price != $product->discounted_price ) {
-                $discount = '<div class="product-price">
-                <span>AED ' . $product->discounted_price . '</span>
-                <span class="old-price">' . $product->price . '</span>
-                </div>';
-                    } else {
-                        $discount = ' <div class="product-price">
-                        <span>AED ' . $product->discounted_price . '</span>
-                </div>';
-                            }
-
+            $priceArray = $product->get_deal_price();
+            $price = $priceArray['price'];
+            
+            $discount = '<div class="product-price">
+                <span>AED ' . $price . '</span>';
+            if(isset($priceArray['old_price'])){
+                $discount .= '<span class="old-price">' . $priceArray['old_price'] . '</span>';        
+            }
+            $discount .= '</div>';
              $html .= '<div class="col-lg-1-5 col-md-4 col-12 col-sm-6 d-none d-xl-block">
             <div class="product-cart-wrap mb-30">
                 <div class="product-img-action-wrap">

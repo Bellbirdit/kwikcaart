@@ -1,6 +1,6 @@
 @extends('layout/master')
 @section('title')
-Safeer | Deals
+Kwikcaart | Deals
 @endsection
 @section('content')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
@@ -66,12 +66,20 @@ Safeer | Deals
                                 <label class="form-label">discount</label>
                                 <input type="number" name="discount" id="discount" class="form-control" />
                             </div>
+                            <!--<div class="col-lg-12">-->
+                            <!--    <label class="form-label">Select Product</label>-->
+
+                            <!--    <select name="products[]" id="products" class="form-control aiz-selectpicker select2  append_here" multiple required data-placeholder="Select Products" data-live-search="true" data-selected-text-format="count">-->
+                            <!--        <option value="" disabled true>Select Product</option>-->
+                            <!--    </select>-->
+                            <!--</div>-->
                             <div class="col-lg-12">
                                 <label class="form-label">Select Product</label>
-
-                                <select name="products[]" id="products" class="form-control aiz-selectpicker select2  append_here" multiple required data-placeholder="Select Products" data-live-search="true" data-selected-text-format="count">
-                                    <option value="" disabled true>Select Product</option>
+                                <select class="form-control" name="products[]" id="products" multiple="multiple" data-ajax--url="{{ route('search-product') }}">
+                                    
+                                    <option value="">Select Product</option>
                                 </select>
+
                             </div>
                         </div>
 
@@ -84,12 +92,70 @@ Safeer | Deals
         </div>
     </div>
 </section>
+<style>
+    input[type="date"]::-webkit-datetime-edit, input[type="date"]::-webkit-inner-spin-button, input[type="date"]::-webkit-clear-button {
+  color: #fff;
+  position: relative;
+}
+
+input[type="date"]::-webkit-datetime-edit-year-field{
+  position: absolute !important;
+  border-left:1px solid #8c8c8c;
+  padding: 2px;
+  color:#000;
+  left: 56px;
+}
+
+input[type="date"]::-webkit-datetime-edit-month-field{
+  position: absolute !important;
+  border-left:1px solid #8c8c8c;
+  padding: 2px;
+  color:#000;
+  left: 26px;
+}
+
+
+input[type="date"]::-webkit-datetime-edit-day-field{
+  position: absolute !important;
+  color:#000;
+  padding: 2px;
+  left: 4px;
+  
+}
+</style>
 <script>
-    $(document).ready(function() {
-        $('.select2').select2({
-            closeOnSelect: false
-        });
+   $(document).ready(function() {
+    $('#products').select2({
+        ajax: {
+            url: $('#products').data('ajax--url'),
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    q: params.term, // User's search query
+                    page: params.page || 1 // Current page number
+                };
+            },
+            processResults: function (data, params) {
+                params.page = params.page || 1;
+
+                return {
+                    results: $.map(data, function (product) {
+                        return {
+                            id: product.id,
+                            text: product.name
+                        }
+                    }),
+                    pagination: {
+                        more: false
+                    }
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 3, // Minimum number of characters for search
     });
+});
 </script>
 <script>
     $(document).ready(function(e) {
@@ -128,32 +194,32 @@ Safeer | Deals
             });
         }));
 
-        $(document).on('change', '.select_store', function() {
+        // $(document).on('change', '.select_store', function() {
 
-            var store_id = $('.select_store option:selected').val();
+        //     var store_id = $('.select_store option:selected').val();
 
-            $(".append_here").html('')
-            $.ajax({
-                url: "/get_products",
-                type: "get",
-                data: {
-                    store_id: store_id
-                },
-                dataType: "JSON",
-                cache: false,
-                success: function(response) {
-                    console.log(response);
-                    if (response["status"] == "fail") {} else if (response["status"] == "success") {
-                        toastr.success('Success', response["msg"])
-                        $('.append_here').html(response['html'])
+        //     $(".append_here").html('')
+        //     $.ajax({
+        //         url: "/get_products",
+        //         type: "get",
+        //         data: {
+        //             store_id: store_id
+        //         },
+        //         dataType: "JSON",
+        //         cache: false,
+        //         success: function(response) {
+        //             console.log(response);
+        //             if (response["status"] == "fail") {} else if (response["status"] == "success") {
+        //                 toastr.success('Success', response["msg"])
+        //                 $('.append_here').html(response['html'])
 
-                    }
-                },
-                error: function(error) {
-                    console.log(error);
-                }
-            });
-        });
+        //             }
+        //         },
+        //         error: function(error) {
+        //             console.log(error);
+        //         }
+        //     });
+        // });
 
 
     });

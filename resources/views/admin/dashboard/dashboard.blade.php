@@ -1,6 +1,6 @@
 @extends('layout/master')
 @section('title')
-Safeer | Dashboard
+Kwikcaart | Dashboard
 @endsection
 @section('content')
 

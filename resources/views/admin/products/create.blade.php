@@ -1,7 +1,7 @@
 @extends('layout/master')
 
 @section('title')
-Safeer | Products
+Kwikcaart | Products
 @endsection
 
 @section('content')
@@ -100,7 +100,7 @@ Safeer | Products
                                             <div class="col-lg-9">
                                                 <div class="custom_select ">
                                                     <select class="js-states form-control select2" name="category" id="input_category" required>
-                                                        <option value="" selected>Choose Category</option>
+                                                        <option value="" >Choose Category</option>
                                                         @foreach($cats as $cat)
                                                         <option value="{{$cat->id}}">{{ucwords($cat->name)}}</option>
                                                         @endforeach
@@ -121,8 +121,8 @@ Safeer | Products
                                             <label class="col-lg-3 col-form-label">Store Code*</label>
                                             <div class="col-lg-9">
                                                 <div class="custom_select ">
-                                                    <select class="js-states form-control select2" name="store_id" id="store_id" required>
-                                                        <option value="" selected>Select Store</option>
+                                                    <select class="js-states form-control select2" multiple name="store_id[]" id="store_id" required>
+                                                        
                                                         @foreach($stores as $cod)
                                                         <option value="{{$cod->code}}">{{ucwords($cod->code)}}</option>
                                                         @endforeach

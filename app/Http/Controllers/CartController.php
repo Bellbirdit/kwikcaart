@@ -13,13 +13,14 @@ use App\Models\Deals;
 use App\Models\DealProduct;
 use App\Models\StorewiseDeal;
 use App\Models\StoredealProduct;
+use App\Models\StoreProducts;
 
 class CartController extends Controller
 {
 
     public function add(Request $request, $id)
     {
-        if (Auth::check() && (Auth::user()->type == '3')) {
+        if (Auth::user() && (Auth::user()->type == '3')) {
             $store_id = session::get('store_id');
             $product = Product::find($id);
             $today = Carbon::today();
@@ -28,56 +29,23 @@ class CartController extends Controller
             } else {
                 $cartquantity = 1;
             }
-            $cart = Cart::where('product_id', $id)->where('user_id', auth()->user()->id)->where('store_id', $store_id)->where('status', 'pending')->first();
-
+            $storeproducts = StoreProducts::where('store_id', $store_id)
+            ->where('stock', 'yes')
+            ->pluck('product_id');
+            $cart = Cart::where('product_id', $id)->where('user_id', auth()->user()->id)->whereIn('product_id', $storeproducts)->where('store_id', $store_id)->where('status', 'pending')->first();
+            
+            $priceArray = $product->get_deal_price();
+            $price = $priceArray['price'];
+            
             if (!$cart) {
                 $img = $product->getImage($product->thumbnail);
-                $price = $product->price;
-
-                $storewisedeals = DB::table('storewise_deals')->where('start_date', '<=', $today)->where('end_date', '>=', $today)->where('status', '0')->where('store_id', $store_id)->first();
-                 $allstoredeal = DB::table('deals')->where('start_date', '<=', $today)->where('end_date', '>=', $today)->where('status', '0')->first();
-
-
                 
-               if (isset($allstoredeal)) {
-                         $alldealpr = DB::table('dealproduct')->where('product_id', $product->id)->where('deal_id', $allstoredeal->id)->first();
-                    if ($alldealpr) {
-                        if ($alldealpr->discount_type == 'percentage') {
-                            $discount_price = $product->price * $alldealpr->discount / 100;
-                            $price = $product->price - $discount_price;
-
-                        } elseif ($alldealpr->discount_type == 'flat') {
-
-                            $price = $product->price - $alldealpr->discount;
-                            
-                        }
-
-                        if (isset($request->qty) && $request->qty != '') {
-                            $cartquantity = $request->qty;
-                        } else {
-                            $cartquantity = 1;
-                        }
-                    }
+                
+                if (isset($request->qty) && $request->qty != '') {
+                    $cartquantity = $request->qty;
+                } else {
+                    $cartquantity = 1;
                 }
-               
-                if (isset($storewisedeals)) {
-                    $stotedealproducts = DB::table('storedeal_products')->where('product_id', $product->id)->where('storedeal_id', $storewisedeals->id)->first();
-                    if ($stotedealproducts) {
-                        if ($stotedealproducts->discount_type == 'percentage') {
-                            $discount_price = $product->price * $stotedealproducts->discount / 100;
-                            $price = $product->price - $discount_price;
-                        } else if ($stotedealproducts->discount_type == 'flat') {
-                            $price = $product->price - $stotedealproducts->discount;
-                        }
-
-                        if (isset($request->qty) && $request->qty != '') {
-                            $cartquantity = $request->qty;
-                        } else {
-                            $cartquantity = 1;
-                        }
-                    }
-                }
-
                 $cart = new Cart();
                 $cart->product_id = $product->id;
                 $cart->store_id = $store_id;
@@ -94,8 +62,13 @@ class CartController extends Controller
 
                 $cart->save();
             } else {
-                $cart->quantity = $cart->quantity + 1;
-                $cart->quantity_price = $cart->quantity * $cart->price;
+                if (isset($request->qty) && $request->qty != '') {
+                    $cartquantity = $request->qty;
+                } else {
+                    $cartquantity = 1;
+                }
+                $cart->quantity = $cart->quantity + $cartquantity;
+                $cart->quantity_price = $cart->quantity * $price;
                 Session::forget('checkout_amount');
                 Session::forget('coupon_status');
                 Session::forget('coupondiscount');
@@ -112,21 +85,27 @@ class CartController extends Controller
                 $file = asset('uploads/files/' . $at);
                 $html .= '
                 <li id="remove' . $cart->id . '">
-                    <div class="shopping-cart-img">
-                        <a href="shop-product-right.html"><img alt="Nest" src="' . $file . '" /></a>
-                    </div>
-                    <div class="shopping-cart-title">
-                        <h4><a href="shop-product-right.html">' . $cart->name . '</a></h4>
-                        <h4><span>' . $cart->quantity . '×</span>' . round($cart->price, 2) . '</h4>
-                    </div>
-                    <div class="shopping-cart-delete">
-                        <a href="javascript:;" id="' . $cart->id . '" class="remove"><i class="fi-rs-cross-small"></i></a>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="shopping-cart-img">
+                                <a href="javascript;:"><img alt="" src="'.$file.'"></a>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="shopping-cart-title">
+                                <p><a href="javascript;:">'.$cart->name.'</a></p><p>
+                                </p><h4><span>'.$cart->quantity.' × </span>'.round($cart->price, 2).'</h4>
+                            </div>
+                        </div>
+                        <div style="    position: absolute;    right: 10px;    width: 26px; ">
+                            <a href="javascript:;" id="'.$cart->id.'" class="remove"><i class="fi-rs-cross-small"></i></a>
+                        </div>
                     </div>
                 </li>
 
 			    ';
             }
-            $cart_count = Cart::where('user_id', auth()->user()->id)->where('store_id', $store_id)->where('status', 'pending')->count();
+            $cart_count = Cart::where('user_id', auth()->user()->id)->whereIn('product_id', $storeproducts)->where('store_id', $store_id)->where('status', 'pending')->count();
             $total = Cart::where('user_id', auth()->user()->id)->where('store_id', Session::get('store_id'))->where('status', 'pending')->sum('quantity_price');
             $total = round($total, 2);
             return response()->json(['status' => 'success', 'msg' => 'Item added to cart', 'total' => $total, 'html' => $html, 'cart_count' => $cart_count]);
@@ -146,11 +125,15 @@ class CartController extends Controller
             } else {
                 $cartquantity = 1;
             }
+            
+            $storeproducts = StoreProducts::where('store_id', $store_id)
+            ->where('stock', 'yes')
+            ->pluck('product_id');
 
             foreach (json_decode($request->products) as $pro) {
                 $today = Carbon::today();
                 $product = Product::find($pro);
-                $cart = Cart::where('product_id', $product->id)->where('user_id', auth()->user()->id)->where('store_id', $store_id)->where('status', 'pending')->first();
+                $cart = Cart::where('product_id', $product->id)->where('user_id', auth()->user()->id)->whereIn('product_id', $storeproducts)->where('store_id', $store_id)->where('status', 'pending')->first();
                 if (!$cart) {
 
                     $img = $product->getImage($product->thumbnail);
@@ -235,8 +218,8 @@ class CartController extends Controller
 
 			';
             }
-            $cart_count = Cart::where('user_id', auth()->user()->id)->where('store_id', $store_id)->where('status', 'pending')->count();
-            $total = Cart::where('user_id', auth()->user()->id)->where('store_id', $store_id)->where('status', 'pending')->sum('quantity_price');
+            $cart_count = Cart::where('user_id', auth()->user()->id)->where('store_id', $store_id)->whereIn('product_id', $storeproducts)->where('status', 'pending')->count();
+            $total = Cart::where('user_id', auth()->user()->id)->where('store_id', $store_id)->whereIn('product_id', $storeproducts)->where('status', 'pending')->sum('quantity_price');
             $total = round($total, 2);
             return response()->json(['status' => 'success', 'msg' => 'Item added to cart', 'total' => $total, 'html' => $html, 'cart_count' => $cart_count]);
         } else {
@@ -265,14 +248,24 @@ class CartController extends Controller
     {
         $store_id = Session::get('store_id');
         $checkout = Session::get('checkout_amount');
-        $carts = Cart::where('user_id', auth()->user()->id)->where('store_id', $store_id)->where('status', 'pending')->get();
+        $storeproducts = StoreProducts::where('store_id', $store_id)
+            ->where('stock', 'yes')
+            ->pluck('product_id');
+        $carts = Cart::where('user_id', auth()->user()->id)->where('store_id', $store_id)->whereIn('product_id', $storeproducts)->where('status', 'pending')->get();
         $deliverycharges = $carts->sum('shipping_cost');
         if ($deliverycharges) {
             Session::put('deliverycharges', $deliverycharges);
         }
+        
+        $subtotal = 0;
+        foreach($carts as $cart){
+            $product = Product::find($cart->product_id);
+            $priceArray = $product->get_deal_price();
+            $price = $priceArray['price'];
+            $subtotal += $price*$cart->quantity;
+        }
 
-
-        $subtotal = $carts->sum('quantity_price');
+        // $subtotal = $carts->sum('quantity_price');
         if ($checkout != '') {
             $coupondiscount = $subtotal - $checkout;
         } else {

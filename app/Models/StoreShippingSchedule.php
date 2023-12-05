@@ -12,7 +12,7 @@ class StoreShippingSchedule extends Model
 
     public function shippingTimes()
     {
-        return $this->hasMany(ShippingTime::class, 'date_id');
+        return $this->hasMany(ShippingTime::class, 'date_id')->orderBy('start_time');
     }
 
 }

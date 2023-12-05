@@ -1,6 +1,6 @@
 @extends('layout/master')
 @section('title')
-Safeer | Home Slider
+Kwikcaart | Home Slider
 @endsection
 @section('content')
 <section class="content-main">

@@ -119,6 +119,7 @@ class CouponController extends Controller
                             if ($total > $coupon->coupon_value) {
                                 $coupon_flatvalue = $coupon->coupon_value;
                                 $checkout_amount = $total - $coupon->coupon_value;
+                                Session::put('coupondiscount', $coupon_flatvalue);
                                 Session::put('checkout_amount', $checkout_amount);
                                 Session::put('coupon_status', 'yes');
                                 Session::put('coupon_value', $coupon_flatvalue);
@@ -133,8 +134,9 @@ class CouponController extends Controller
                             
                             $discount_amount = $total / 100 * $coupon->coupon_value;
                             $checkout_amount = $total - $discount_amount;
-                            dd($checkout_amount);
+                            // dd($checkout_amount);
                             if ($total > $checkout_amount) {
+                                Session::put('coupondiscount', $discount_amount);
                                 Session::put('checkout_amount', $checkout_amount);
                                 Session::put('coupon_status', 'yes');
                                 Session::put('coupon_value', $coupon_value);

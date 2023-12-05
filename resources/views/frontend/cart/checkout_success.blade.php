@@ -1,6 +1,6 @@
 @extends('frontend/layout/master')
 @section('title')
-Safeer | Success
+Kwikcaart | Success
 @endsection
 @section('frontend/content')
 
@@ -18,7 +18,7 @@ Safeer | Success
     <div class="container mb-80 mt-50">
         <div class="row">
             <div class="col-lg-12 text-center mb-40">
-                <h1 class="heading-2 mb-10">Thankyou {{Auth::user()->name}} for placing an order on Safeer Market</h1>
+                <h1 class="heading-2 mb-10">Thankyou {{Auth::user()->name}} for placing an order on Kwikcaart</h1>
             </div>
         </div>
         <?php

@@ -34,12 +34,13 @@
                     </a>
                 </li>
 
-                <li class="menu-item ">
-                    <a class="menu-link" href="{{url('wallet')}}">
+                <!--<li class="menu-item ">-->
+                <!--    <a class="menu-link" href="{{url('wallet')}}">-->
             
-                        <span class="text">Wallet</span>
-                    </a>
-                </li>   <li class="menu-item ">
+                <!--        <span class="text">Wallet</span>-->
+                <!--    </a>-->
+                <!--</li>   -->
+                <li class="menu-item ">
                     <a class="menu-link" href="{{url('track-order')}}">
                         
                         <span class="text">Track Order</span>

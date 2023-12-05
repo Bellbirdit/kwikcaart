@@ -1,6 +1,6 @@
 @extends('layout/master')
 @section('title')
-Safeer | Order Detail
+Kwikcaart | Order Detail
 @endsection
 @section('content')
 @if(isset($orders) && !empty($orders))
@@ -17,7 +17,7 @@ Safeer | Order Detail
                 <div class="col-lg-4 col-md-4 mb-lg-0 mb-15">
                     <span> <i class="material-icons md-calendar_today"></i> <b>{{ \Carbon\Carbon::parse($orders->created_at)->isoFormat('MMM Do YYYY')}} </b>
                     </span> <br />
-                    <small class="text-muted">Order ID: {{$orders->order_number}}</small>
+                    <span class="text-muted">Order ID: {{$orders->order_number}}</span>
                 </div>
                 <div class="col-lg-4 col-md-4 mb-lg-0 mb-15 text-md-center">
                     @if($orders->delivery_option == 'express_delivery')
@@ -25,13 +25,13 @@ Safeer | Order Detail
                      @elseif($orders->delivery_option == 'self_pickup')
                         <span> <i class="material-icons"></i> <b>Self Pickup </b>
                     </span> <br />
-                    <small class="text-muted">Date: {{$orders->pick_date}}</small><br />
-                    <small class="text-muted">Time: {{$orders->pick_time}}</small>
+                    <span class="text-muted">Date: {{$orders->pick_date}}</span><br />
+                    <span class="text-muted">Time: {{$orders->pick_time}}</span>
                     @elseif($orders->delivery_option == 'standerd_delivery')
                     <span> <i class="material-icons"></i> <b>Standard Delivery </b>
                     </span> <br />
-                    <small class="text-muted">Date: {{$orders->pick_date}}</small><br />
-                    <small class="text-muted">Time: {{$orders->pick_time}}</small>
+                    <span class="text-muted">Date: {{$orders->pick_date}}</span><br />
+                    <span class="text-muted">Time: {{$orders->pick_time}}</span>
                     @endif
                 </div>
                 <div class=" col-lg-3 col-md-3 mb-lg-0 mb-15 ">
@@ -56,8 +56,51 @@ Safeer | Order Detail
                 <div class="col-lg-1 col-md-1 mb-lg-0 mb-15 text-md-end">
                     <a href="/order/download/{{$orders->id}}" class="btn btn-primary"><i class="fa fa-file-pdf"></i></a>
                 </div>
-
+                <div class="col-lg-12">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <td>
+                                                    Created <br>
+                                                    <span class="text-muted">{{date("d F,Y h:i A", strtotime($orders->created_at))}}</span>
+                                                </td>
+                                                @php
+                                                $statusOrder = [];
+                                                @endphp
+                                                
+                                                @if(!$orders->orderActivity->isEmpty())
+                                                    @foreach($orders->orderActivity as $activity)
+                                                    @php
+                                                        if(!in_array($activity->status, $statusOrder)){
+                                                            $statusOrder[] = $activity->status;
+                                                        }else{
+                                                            continue;
+                                                        }
+                                                    @endphp
+                                                    <td>
+                                                        {{ucfirst($activity->status)}} <br>
+                                                        <span class="text-muted">{{date("d F,Y h:i A", strtotime($activity->created_at))}}</span>
+                                                    </td>
+                                                    @endforeach
+                                                @else
+                                                    <td>
+                                                        {{ucfirst($orders->order_status)}} <br>
+                                                        <span class="text-muted">{{date("d F,Y h:i A", strtotime($orders->updated_at))}}</span>
+                                                    </td>
+                                                @endif
+                                                
+                                                
+                                            </tr>
+                                        </thead>
+                                        
+                                    </table>
+                                </div>
+                            </div>
             </div>
+            
+            
+            
         </header>
         <!-- card-header end// -->
         <div class="card-body">

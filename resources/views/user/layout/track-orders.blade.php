@@ -1,7 +1,7 @@
 <div class="tab-pane fade" id="track-orders" role="tabpanel" aria-labelledby="track-orders-tab">
     <div class="card">
         <div class="card-header">
-            <h3 class="mb-0">Orders tracking</h3>
+            <h1 class="mb-3">Orders tracking</h1>
         </div>
         <div class="card-body contact-from-area">
             <p>To track your order please enter your OrderID in the box below and press "Track" button. This was given

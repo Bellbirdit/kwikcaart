@@ -1,6 +1,6 @@
 @extends('user/layout/master')
 @section('title')
-Safeer | wishlist
+Kwikcaart | wishlist
 @endsection
 @section('content')
 

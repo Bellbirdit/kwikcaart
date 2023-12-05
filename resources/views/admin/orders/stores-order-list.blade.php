@@ -1,6 +1,6 @@
 @extends('layout/master')
 @section('title')
-Safeer | Orders
+Kwikcaart | Orders
 @endsection
 
 @section('content')
@@ -185,7 +185,7 @@ Safeer | Orders
             filterStatus = $("#filterStatus").val();
 
             check = $("#dateCheck-input").val()
-            filterLength = 9;
+            filterLength = 50;
 
 
         }
